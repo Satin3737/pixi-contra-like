@@ -1,0 +1,56 @@
+@mixin hideScrollBar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@mixin customScrollBar {
+    scrollbar-color: aquamarine gray;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: gray;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: aquamarine;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-button:decrement,
+    &::-webkit-scrollbar-button:increment {
+        display: none;
+    }
+}
+
+@mixin mediaHover {
+    @media (hover: hover) {
+        @content;
+    }
+}
+
+@mixin visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: none;
+    background: none;
+    padding: 0;
+    opacity: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}

@@ -1,0 +1,24 @@
+import js from '@eslint/js';
+import {defineConfig, globalIgnores} from 'eslint/config';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+const customEsLintSettings = {
+    '@typescript-eslint/no-unused-expressions': ['error', {allowShortCircuit: true, allowTernary: true}],
+    '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {argsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_', args: 'after-used', ignoreRestSiblings: true}
+    ],
+    '@typescript-eslint/no-explicit-any': ['error', {ignoreRestArgs: true}],
+    '@typescript-eslint/no-duplicate-enum-values': 'off'
+};
+
+export default defineConfig([
+    globalIgnores(['dist']),
+    {
+        files: ['**/*.{ts,tsx}'],
+        extends: [js.configs.recommended, tseslint.configs.recommended],
+        languageOptions: {ecmaVersion: 2020, globals: globals.browser},
+        rules: customEsLintSettings
+    }
+]);

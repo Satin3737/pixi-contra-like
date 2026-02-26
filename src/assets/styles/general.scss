@@ -1,0 +1,21 @@
+@use 'reboot';
+@use 'helper' as h;
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    background: darkgray;
+    color: white;
+    height: 100dvh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    @include h.customScrollBar;
+}
