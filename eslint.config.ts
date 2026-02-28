@@ -1,9 +1,10 @@
 import js from '@eslint/js';
+import type {Linter} from 'eslint';
 import {defineConfig, globalIgnores} from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-const customEsLintSettings = {
+const customEsLintSettings: Linter.RulesRecord = {
     '@typescript-eslint/no-unused-expressions': ['error', {allowShortCircuit: true, allowTernary: true}],
     '@typescript-eslint/no-unused-vars': [
         'warn',
