@@ -16,7 +16,9 @@ const config: Config = {
         '^@/interfaces(.*)$',
         '^@/utils(.*)$',
         '^@/services(.*)$',
-        '^[./]'
+        '^@/entities(.*)$',
+        '^@/(.*)$',
+        '^[./(.*)$]'
     ],
     importOrderSortSpecifiers: true,
     plugins: ['@trivago/prettier-plugin-sort-imports']
