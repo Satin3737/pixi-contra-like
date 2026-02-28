@@ -27,6 +27,32 @@ class Game {
         return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
     }
 
+    public onKeyDown(event: KeyboardEvent) {
+        switch (event.code) {
+            case 'ArrowLeft':
+                this.hero.moveLeft();
+                break;
+            case 'ArrowRight':
+                this.hero.moveRight();
+                break;
+            case 'Space':
+            case 'ArrowUp':
+                this.hero.jump();
+                break;
+        }
+    }
+
+    public onKeyUp(event: KeyboardEvent) {
+        switch (event.code) {
+            case 'ArrowLeft':
+                this.hero.stopMoveLeft();
+                break;
+            case 'ArrowRight':
+                this.hero.stopMoveRight();
+                break;
+        }
+    }
+
     private update() {
         const prevHeroPos = this.hero.position.clone();
 
