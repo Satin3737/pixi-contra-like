@@ -1,22 +1,25 @@
 import type {Application, Container} from 'pixi.js';
-import {Hero, Platform} from '@/entities';
+import {KeyboardService} from '@/services';
+import {Hero, Platform, PlatformFactory} from '@/entities';
 
 class Game {
     private readonly app: Application;
+    private readonly platformFactory: PlatformFactory;
     private readonly platforms: Platform[];
     private readonly hero: Hero;
+    public readonly keyboardService: KeyboardService;
 
     constructor(app: Application) {
         this.app = app;
+        this.platformFactory = new PlatformFactory();
+        this.keyboardService = new KeyboardService();
         this.platforms = [];
 
-        this.hero = new Hero();
-        this.hero.x = 100;
-        this.hero.y = 0;
+        this.hero = new Hero(this, {x: 100, y: 0});
 
-        this.platforms.push(new Platform({x: 50, y: 300}));
-        this.platforms.push(new Platform({x: 300, y: 360}));
-        this.platforms.push(new Platform({x: 500, y: 300}));
+        this.platforms.push(this.platformFactory.createPlatform({x: 50, y: 300}));
+        this.platforms.push(this.platformFactory.createPlatform({x: 300, y: 360}));
+        this.platforms.push(this.platformFactory.createPlatform({x: 500, y: 300}));
 
         this.app.stage.addChild(this.hero, ...this.platforms);
 
@@ -27,33 +30,7 @@ class Game {
         return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
     }
 
-    public onKeyDown(event: KeyboardEvent) {
-        switch (event.code) {
-            case 'ArrowLeft':
-                this.hero.moveLeft();
-                break;
-            case 'ArrowRight':
-                this.hero.moveRight();
-                break;
-            case 'Space':
-            case 'ArrowUp':
-                this.hero.jump();
-                break;
-        }
-    }
-
-    public onKeyUp(event: KeyboardEvent) {
-        switch (event.code) {
-            case 'ArrowLeft':
-                this.hero.stopMoveLeft();
-                break;
-            case 'ArrowRight':
-                this.hero.stopMoveRight();
-                break;
-        }
-    }
-
-    private update() {
+    private update(): void {
         const prevHeroPos = this.hero.position.clone();
 
         this.hero.update();

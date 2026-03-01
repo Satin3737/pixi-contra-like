@@ -8,6 +8,4 @@ await app.init({resizeTo: window});
 await initDevtools({app});
 document.body.appendChild(app.canvas);
 
-const game = new Game(app);
-document.addEventListener('keydown', event => game.onKeyDown(event));
-document.addEventListener('keyup', event => game.onKeyUp(event));
+new Game(app);
