@@ -12,8 +12,8 @@ const config: Config = {
     importOrder: [
         '<THIRD_PARTY_MODULES>',
         '^@/assets(.*)$',
-        '^@/const(.*)$',
         '^@/interfaces(.*)$',
+        '^@/const(.*)$',
         '^@/utils(.*)$',
         '^@/services(.*)$',
         '^@/entities(.*)$',
