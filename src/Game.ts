@@ -4,17 +4,13 @@ import {Hero, Platform, PlatformFactory} from '@/entities';
 
 class Game {
     private readonly app: Application;
-    private readonly platformFactory: PlatformFactory;
-    private readonly platforms: Platform[];
+    private readonly platformFactory: PlatformFactory = new PlatformFactory();
+    private readonly platforms: Platform[] = [];
     private readonly hero: Hero;
-    public readonly keyboardService: KeyboardService;
+    public readonly keyboardService: KeyboardService = new KeyboardService();
 
     constructor(app: Application) {
         this.app = app;
-        this.platformFactory = new PlatformFactory();
-        this.keyboardService = new KeyboardService();
-        this.platforms = [];
-
         this.hero = new Hero(this, {x: 100, y: 0});
 
         this.platforms.push(this.platformFactory.createPlatform({x: 50, y: 300}));
@@ -22,7 +18,6 @@ class Game {
         this.platforms.push(this.platformFactory.createPlatform({x: 500, y: 300}));
 
         this.app.stage.addChild(this.hero, ...this.platforms);
-
         this.app.ticker.add(this.update, this);
     }
 

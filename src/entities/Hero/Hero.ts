@@ -5,28 +5,20 @@ import type Game from '@/Game';
 
 class Hero extends Container {
     private readonly game: Game;
-    private readonly view: Graphics;
-    private readonly gravityForce: number;
-    private readonly jumpForce: number;
-    private readonly speed: number;
-    private readonly velocity: {x: number; y: number};
-    private readonly movement: {x: number; y: number};
-    private readonly horizontalMovementContext: {left: number; right: number};
-    private state: IStates;
+    private readonly view: Graphics = new Graphics();
+    private readonly gravityForce: number = 0.1;
+    private readonly jumpForce: number = 4;
+    private readonly speed: number = 2;
+    private readonly velocity: {x: number; y: number} = {x: 0, y: 0};
+    private readonly movement: {x: number; y: number} = {x: 0, y: 0};
+    private readonly horizontalMovementContext: {left: number; right: number} = {left: 0, right: 0};
+    private state: IStates = States.idle;
 
     constructor(game: Game, containerOptions?: ContainerOptions) {
         super(containerOptions);
 
         this.game = game;
-        this.gravityForce = 0.1;
-        this.jumpForce = 4;
-        this.speed = 2;
-        this.velocity = {x: 0, y: 0};
-        this.movement = {x: 0, y: 0};
-        this.horizontalMovementContext = {left: 0, right: 0};
-        this.state = States.idle;
 
-        this.view = new Graphics();
         this.view.rect(0, 0, 20, 60).stroke({width: 2, color: 0x0000ff});
         this.addChild(this.view);
 
