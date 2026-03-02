@@ -1,4 +1,5 @@
 import type {Application, Container} from 'pixi.js';
+import type {ICollision, IPos} from '@/interfaces';
 import {KeyboardService} from '@/services';
 import {Hero, Platform, PlatformFactory} from '@/entities';
 
@@ -25,26 +26,36 @@ class Game {
         return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
     }
 
+    private isCollision(a: Container, b: Container, prevPos: IPos): ICollision {
+        const result = {vertical: false, horizontal: false};
+
+        if (!this.isAABBCollision(a, b)) return result;
+
+        const currY = a.y;
+        a.y = prevPos.y;
+
+        this.isAABBCollision(a, b) ? (result.horizontal = true) : (result.vertical = true);
+
+        a.y = currY;
+        return result;
+    }
+
     private update(): void {
         const prevHeroPos = this.hero.position.clone();
 
         this.hero.update();
 
         for (const platform of this.platforms) {
-            if (!this.isAABBCollision(this.hero, platform)) {
-                continue;
-            }
+            const collision = this.isCollision(this.hero, platform, prevHeroPos);
 
-            const currY = this.hero.y;
-            this.hero.y = prevHeroPos.y;
-
-            if (!this.isAABBCollision(this.hero, platform)) {
+            if (collision.vertical) {
+                this.hero.y = prevHeroPos.y;
                 this.hero.stay();
-                continue;
             }
 
-            this.hero.y = currY;
-            this.hero.x = prevHeroPos.x;
+            if (collision.horizontal) {
+                this.hero.x = prevHeroPos.x;
+            }
         }
     }
 }
