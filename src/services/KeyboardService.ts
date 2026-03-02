@@ -1,12 +1,12 @@
-import type {IKeyCallback, IKeys, IKeysCallbacks} from '@/interfaces';
-import {Keys} from '@/const';
+import type {IKeyCallback, IKeyEvents, IKeys, IKeysCallbacks} from '@/interfaces';
+import {KeyEvents, Keys} from '@/const';
 
 class KeyboardService {
     private readonly keysCallbacks: IKeysCallbacks;
 
     constructor() {
         this.keysCallbacks = Object.values(Keys).reduce<IKeysCallbacks>((acc, key) => {
-            acc[key] = {onUp: [], onDown: []};
+            acc[key] = {[KeyEvents.keyUp]: [], [KeyEvents.keyDown]: []};
             return acc;
         }, {} as IKeysCallbacks);
 
@@ -14,28 +14,26 @@ class KeyboardService {
     }
 
     private initListeners(): void {
-        document.addEventListener('keydown', event => this.onKeyDown(event));
-        document.addEventListener('keyup', event => this.onKeyUp(event));
+        Object.values(KeyEvents).forEach(eventType => {
+            document.addEventListener(eventType, event => this.onKeyEvent(event, eventType));
+        });
     }
 
-    private onKeyDown(event: KeyboardEvent): void {
-        if (event.code in this.keysCallbacks) {
-            this.keysCallbacks[event.code as IKeys].onDown.forEach(cb => cb(event));
-        }
+    private isKeyExists(keyCode: string): keyCode is IKeys {
+        return keyCode in this.keysCallbacks;
     }
 
-    private onKeyUp(event: KeyboardEvent): void {
-        if (event.code in this.keysCallbacks) {
-            this.keysCallbacks[event.code as IKeys].onUp.forEach(cb => cb(event));
-        }
+    private onKeyEvent(event: KeyboardEvent, type: IKeyEvents): void {
+        if (!this.isKeyExists(event.code)) return;
+        this.keysCallbacks[event.code][type].forEach(cb => cb(event));
     }
 
-    public attachKeyDown(key: IKeys, callback: IKeyCallback): void {
-        this.keysCallbacks[key].onDown.push(callback);
+    public attachKey(key: IKeys, type: IKeyEvents, callback: IKeyCallback): void {
+        this.keysCallbacks[key][type].push(callback);
     }
 
-    public attachKeyUp(key: IKeys, callback: IKeyCallback): void {
-        this.keysCallbacks[key].onUp.push(callback);
+    public detachKey(key: IKeys, type: IKeyEvents, callback: IKeyCallback): void {
+        this.keysCallbacks[key][type] = this.keysCallbacks[key][type].filter(cb => cb !== callback);
     }
 }
 

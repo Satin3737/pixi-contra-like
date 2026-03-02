@@ -1,6 +1,6 @@
 import {Container, type ContainerOptions, Graphics} from 'pixi.js';
 import type {IStates} from '@/interfaces';
-import {Keys, States} from '@/const';
+import {KeyEvents, Keys, States} from '@/const';
 import type Game from '@/Game';
 
 class Hero extends Container {
@@ -26,13 +26,12 @@ class Hero extends Container {
     }
 
     private initControls(): void {
-        this.game.keyboardService.attachKeyDown(Keys.left, () => this.moveLeft());
-        this.game.keyboardService.attachKeyDown(Keys.right, () => this.moveRight());
-        this.game.keyboardService.attachKeyDown(Keys.up, () => this.jump());
-        this.game.keyboardService.attachKeyDown(Keys.space, () => this.jump());
+        this.game.keyboardService.attachKey(Keys.left, KeyEvents.keyDown, () => this.moveLeft());
+        this.game.keyboardService.attachKey(Keys.right, KeyEvents.keyDown, () => this.moveRight());
+        this.game.keyboardService.attachKey(Keys.space, KeyEvents.keyDown, () => this.jump());
 
-        this.game.keyboardService.attachKeyUp(Keys.left, () => this.stopMoveLeft());
-        this.game.keyboardService.attachKeyUp(Keys.right, () => this.stopMoveRight());
+        this.game.keyboardService.attachKey(Keys.left, KeyEvents.keyUp, () => this.stopMoveLeft());
+        this.game.keyboardService.attachKey(Keys.right, KeyEvents.keyUp, () => this.stopMoveRight());
     }
 
     public moveLeft(): void {
