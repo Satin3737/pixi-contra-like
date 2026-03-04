@@ -1,5 +1,5 @@
 import {Container, type ContainerOptions, Graphics} from 'pixi.js';
-import type {IStates} from '@/interfaces';
+import type {IPosSize, IStates} from '@/interfaces';
 import {KeyEvents, Keys, States} from '@/const';
 import type Game from '@/Game';
 
@@ -7,12 +7,13 @@ class Hero extends Container {
     private readonly game: Game;
     private readonly view: Graphics = new Graphics();
     private readonly gravityForce: number = 0.1;
-    private readonly jumpForce: number = 4;
+    private readonly jumpForce: number = 6;
     private readonly speed: number = 2;
     private readonly velocity: {x: number; y: number} = {x: 0, y: 0};
     private readonly movement: {x: number; y: number} = {x: 0, y: 0};
     private readonly horizontalMovementContext: {left: number; right: number} = {left: 0, right: 0};
     private state: IStates = States.idle;
+    public heroBounds: IPosSize = {x: 0, y: 0, width: 0, height: 0};
 
     constructor(game: Game, containerOptions?: ContainerOptions) {
         super(containerOptions);
@@ -32,6 +33,19 @@ class Hero extends Container {
 
         this.game.keyboardService.attachKey(Keys.left, KeyEvents.keyUp, () => this.stopMoveLeft());
         this.game.keyboardService.attachKey(Keys.right, KeyEvents.keyUp, () => this.stopMoveRight());
+    }
+
+    public get bounds(): IPosSize {
+        this.heroBounds.x = this.x;
+        this.heroBounds.y = this.y;
+        this.heroBounds.width = this.width;
+        this.heroBounds.height = this.height;
+
+        return this.heroBounds;
+    }
+
+    public get isSkipCollision(): boolean {
+        return this.state === States.jump;
     }
 
     public moveLeft(): void {
@@ -71,6 +85,10 @@ class Hero extends Container {
 
         this.velocity.y += this.gravityForce;
         this.y += this.velocity.y;
+
+        if (this.velocity.y > 0 && this.state === States.jump) {
+            this.state = States.fall;
+        }
     }
 }
 

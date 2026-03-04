@@ -1,5 +1,6 @@
-import type {Application, Container} from 'pixi.js';
-import type {ICollision, IPos} from '@/interfaces';
+import type {Application} from 'pixi.js';
+import type {ICollision, IPos, IPosSize} from '@/interfaces';
+import {PlatformsData} from '@/data';
 import {KeyboardService} from '@/services';
 import {Hero, Platform, PlatformFactory} from '@/entities';
 
@@ -14,29 +15,21 @@ class Game {
         this.app = app;
         this.hero = new Hero(this, {x: 100, y: 0});
 
-        this.platforms.push(this.platformFactory.createPlatform({x: 50, y: 300}));
-        this.platforms.push(this.platformFactory.createPlatform({x: 300, y: 360}));
-        this.platforms.push(this.platformFactory.createPlatform({x: 500, y: 300}));
+        PlatformsData.forEach(pos => this.platforms.push(this.platformFactory.createPlatform(pos)));
 
         this.app.stage.addChild(this.hero, ...this.platforms);
         this.app.ticker.add(this.update, this);
     }
 
-    private isAABBCollision(a: Container, b: Container): boolean {
+    private isAABBCollision(a: IPosSize, b: IPosSize): boolean {
         return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
     }
 
-    private isCollision(a: Container, b: Container, prevPos: IPos): ICollision {
+    private getIsCollision(aa: IPosSize, bb: IPosSize, aaPrevPos: IPos): ICollision {
         const result = {vertical: false, horizontal: false};
-
-        if (!this.isAABBCollision(a, b)) return result;
-
-        const currY = a.y;
-        a.y = prevPos.y;
-
-        this.isAABBCollision(a, b) ? (result.horizontal = true) : (result.vertical = true);
-
-        a.y = currY;
+        if (!this.isAABBCollision(aa, bb)) return result;
+        aa.y = aaPrevPos.y;
+        this.isAABBCollision(aa, bb) ? (result.horizontal = true) : (result.vertical = true);
         return result;
     }
 
@@ -46,15 +39,13 @@ class Game {
         this.hero.update();
 
         for (const platform of this.platforms) {
-            const collision = this.isCollision(this.hero, platform, prevHeroPos);
+            if (this.hero.isSkipCollision) continue;
+
+            const collision = this.getIsCollision(this.hero.bounds, platform, prevHeroPos);
 
             if (collision.vertical) {
                 this.hero.y = prevHeroPos.y;
                 this.hero.stay();
-            }
-
-            if (collision.horizontal) {
-                this.hero.x = prevHeroPos.x;
             }
         }
     }
