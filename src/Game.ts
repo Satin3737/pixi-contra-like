@@ -45,7 +45,7 @@ class Game {
 
             if (collision.vertical) {
                 this.hero.y = prevHeroPos.y;
-                this.hero.stay();
+                this.hero.idle();
             }
         }
     }
