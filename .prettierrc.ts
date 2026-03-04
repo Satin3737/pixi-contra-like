@@ -14,6 +14,7 @@ const config: Config = {
         '^@/assets(.*)$',
         '^@/interfaces(.*)$',
         '^@/const(.*)$',
+        '^@/data(.*)$',
         '^@/utils(.*)$',
         '^@/services(.*)$',
         '^@/entities(.*)$',
