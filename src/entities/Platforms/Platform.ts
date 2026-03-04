@@ -5,7 +5,7 @@ class Platform extends Container {
 
     constructor(params: ContainerOptions) {
         super(params);
-        this.view.rect(0, 0, 300, 30).stroke({width: 2, color: 0x00ff00});
+        this.view.rect(0, 0, 200, 30).stroke({width: 2, color: 0x00ff00});
         this.addChild(this.view);
     }
 }
