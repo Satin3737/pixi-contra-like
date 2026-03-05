@@ -99,12 +99,12 @@ class Hero extends Container {
         this.velocity.x = this.movement.x * this.speed;
         this.x += this.velocity.x;
 
-        this.velocity.y += this.gravityForce;
-        this.y += this.velocity.y;
-
         if (this.velocity.y > 0 && this.state === States.jump) {
             this.state = States.fall;
         }
+
+        this.velocity.y += this.gravityForce;
+        this.y += this.velocity.y;
     }
 }
 
