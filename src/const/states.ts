@@ -1,5 +1,5 @@
 export const States = {
-    idle: 'idle',
+    stay: 'stay',
     run: 'run',
     jump: 'jump',
     fall: 'fall'

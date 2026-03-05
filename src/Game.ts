@@ -1,5 +1,6 @@
 import type {Application} from 'pixi.js';
 import type {ICollision, IPos, IPosSize} from '@/interfaces';
+import {PlatformTypes} from '@/const';
 import {PlatformsData} from '@/data';
 import {KeyboardService} from '@/services';
 import {Hero, Platform, PlatformFactory} from '@/entities';
@@ -39,13 +40,21 @@ class Game {
         this.hero.update();
 
         for (const platform of this.platforms) {
-            if (this.hero.isSkipCollision) continue;
+            if (this.hero.isSkipCollision && platform.type !== PlatformTypes.solid) continue;
 
             const collision = this.getIsCollision(this.hero.bounds, platform, prevHeroPos);
 
             if (collision.vertical) {
                 this.hero.y = prevHeroPos.y;
-                this.hero.idle();
+                this.hero.stay(platform.y);
+            }
+
+            if (collision.horizontal) {
+                if (platform.isSteppable) {
+                    this.hero.stay(platform.y);
+                }
+
+                this.hero.x = prevHeroPos.x;
             }
         }
     }

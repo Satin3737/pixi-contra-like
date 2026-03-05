@@ -6,11 +6,11 @@ import type Game from '@/Game';
 class Hero extends Container {
     private readonly game: Game;
     private readonly view: Graphics = new Graphics();
-    private readonly gravityForce: number = 0.1;
-    private readonly jumpForce: number = 6;
-    private readonly speed: number = 2;
+    private readonly gravityForce: number = 0.2;
+    private readonly jumpForce: number = 9;
+    private readonly speed: number = 3;
 
-    private state: IStates = States.idle;
+    private state: IStates = States.stay;
     private velocity: {x: number; y: number} = {x: 0, y: 0};
     private movement: {x: number; y: number} = {x: 0, y: 0};
     private movementContext: {left: number; right: number} = {left: 0, right: 0};
@@ -21,7 +21,7 @@ class Hero extends Container {
 
         this.game = game;
 
-        this.view.rect(0, 0, 20, 60).stroke({width: 2, color: 0x0000ff});
+        this.view.rect(0, 0, 20, 80).stroke({width: 2, color: 0x0000ff});
         this.addChild(this.view);
 
         this.initControls();
@@ -82,8 +82,9 @@ class Hero extends Container {
         !this.aimContext.down && (this.velocity.y = -this.jumpForce);
     }
 
-    public idle(): void {
-        this.state = States.idle;
+    public stay(y: number): void {
+        this.state = States.stay;
+        this.y = y - this.height;
         this.velocity.y = 0;
     }
 
@@ -99,7 +100,7 @@ class Hero extends Container {
         this.velocity.x = this.movement.x * this.speed;
         this.x += this.velocity.x;
 
-        if (this.velocity.y > 0 && this.state === States.jump) {
+        if (this.velocity.y > 0 && (this.state === States.jump || this.state === States.stay)) {
             this.state = States.fall;
         }
 
