@@ -2,7 +2,6 @@ import type {Application} from 'pixi.js';
 import type {ICollision, IPos, IPosSize} from '@/interfaces';
 import {PlatformTypes} from '@/const';
 import {PlatformsData} from '@/data';
-import {KeyboardService} from '@/services';
 import {Hero, Platform, PlatformFactory} from '@/entities';
 
 class Game {
@@ -10,15 +9,14 @@ class Game {
     private readonly platformFactory: PlatformFactory = new PlatformFactory();
     private readonly platforms: Platform[] = [];
     private readonly hero: Hero;
-    public readonly keyboardService: KeyboardService = new KeyboardService();
 
     constructor(app: Application) {
         this.app = app;
-        this.hero = new Hero(this, {x: 100, y: 0});
+        this.hero = new Hero(this.app.stage, {x: 100, y: 0});
 
         PlatformsData.forEach(pos => this.platforms.push(this.platformFactory.createPlatform(pos)));
 
-        this.app.stage.addChild(this.hero, ...this.platforms);
+        this.app.stage.addChild(...this.platforms);
         this.app.ticker.add(this.update, this);
     }
 
@@ -35,7 +33,7 @@ class Game {
     }
 
     private update(): void {
-        const prevHeroPos = this.hero.position.clone();
+        const prevHeroPos = this.hero.bounds;
 
         this.hero.update();
 
@@ -53,8 +51,6 @@ class Game {
                 if (platform.isSteppable) {
                     this.hero.stay(platform.y);
                 }
-
-                this.hero.x = prevHeroPos.x;
             }
         }
     }

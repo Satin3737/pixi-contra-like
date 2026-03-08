@@ -1,82 +1,65 @@
-import {Container, type ContainerOptions, Graphics} from 'pixi.js';
+import type {Container, ContainerOptions} from 'pixi.js';
 import type {IPosSize, IStates} from '@/interfaces';
-import {KeyEvents, Keys, States} from '@/const';
-import type Game from '@/Game';
+import {States} from '@/const';
+import {HeroControls, HeroView} from './';
 
-class Hero extends Container {
-    private readonly game: Game;
-    private readonly view: Graphics = new Graphics();
+class Hero {
+    private readonly stage: Container;
+    private readonly view: HeroView;
     private readonly gravityForce: number = 0.2;
     private readonly jumpForce: number = 9;
     private readonly speed: number = 3;
 
     private state: IStates = States.stay;
+    private size: {width: number; height: number} = {width: 0, height: 0};
     private velocity: {x: number; y: number} = {x: 0, y: 0};
     private movement: {x: number; y: number} = {x: 0, y: 0};
     private movementContext: {left: number; right: number} = {left: 0, right: 0};
     private aimContext: {up: boolean; down: boolean} = {up: false, down: false};
 
-    constructor(game: Game, containerOptions?: ContainerOptions) {
-        super(containerOptions);
+    constructor(stage: Container, options?: ContainerOptions) {
+        this.stage = stage;
 
-        this.game = game;
-
-        this.view.rect(0, 0, 20, 80).stroke({width: 2, color: 0x0000ff});
-        this.addChild(this.view);
-
-        this.initControls();
+        this.size = {width: 20, height: 80};
+        this.view = new HeroView({...options, ...this.size});
+        new HeroControls(this);
+        this.stage.addChild(this.view);
     }
 
-    private initControls(): void {
-        this.game.keyboardService.attachKey(Keys.left, KeyEvents.keyDown, () => this.moveLeft());
-        this.game.keyboardService.attachKey(Keys.left, KeyEvents.keyUp, () => this.stopMoveLeft());
-
-        this.game.keyboardService.attachKey(Keys.right, KeyEvents.keyDown, () => this.moveRight());
-        this.game.keyboardService.attachKey(Keys.right, KeyEvents.keyUp, () => this.stopMoveRight());
-
-        this.game.keyboardService.attachKey(Keys.up, KeyEvents.keyDown, () => this.lookUp());
-        this.game.keyboardService.attachKey(Keys.up, KeyEvents.keyUp, () => this.lookForward());
-
-        this.game.keyboardService.attachKey(Keys.down, KeyEvents.keyDown, () => this.lookDown());
-        this.game.keyboardService.attachKey(Keys.down, KeyEvents.keyUp, () => this.lookForward());
-
-        this.game.keyboardService.attachKey(Keys.space, KeyEvents.keyDown, () => this.jump());
-    }
-
-    private moveLeft(): void {
+    public moveLeft(): void {
         this.movementContext.left = -1;
         this.movement.x = this.movementContext.right ? 0 : this.movementContext.left;
     }
 
-    private moveRight(): void {
+    public moveRight(): void {
         this.movementContext.right = 1;
         this.movement.x = this.movementContext.left ? 0 : this.movementContext.right;
     }
 
-    private stopMoveLeft(): void {
+    public stopMoveLeft(): void {
         this.movementContext.left = 0;
         this.movement.x = this.movementContext.right;
     }
 
-    private stopMoveRight(): void {
+    public stopMoveRight(): void {
         this.movementContext.right = 0;
         this.movement.x = this.movementContext.left;
     }
 
-    private lookUp(): void {
+    public lookUp(): void {
         this.aimContext.up = true;
     }
 
-    private lookDown(): void {
+    public lookDown(): void {
         this.aimContext.down = true;
     }
 
-    private lookForward(): void {
+    public lookForward(): void {
         this.aimContext.down = false;
         this.aimContext.up = false;
     }
 
-    private jump(): void {
+    public jump(): void {
         if (this.state === States.jump || this.state === States.fall) return;
         this.state = States.jump;
         !this.aimContext.down && (this.velocity.y = -this.jumpForce);
@@ -84,12 +67,28 @@ class Hero extends Container {
 
     public stay(y: number): void {
         this.state = States.stay;
-        this.y = y - this.height;
+        this.y = y - this.bounds.height;
         this.velocity.y = 0;
     }
 
+    public get x(): number {
+        return this.view.x;
+    }
+
+    public set x(value: number) {
+        this.view.x = value;
+    }
+
+    public get y(): number {
+        return this.view.y;
+    }
+
+    public set y(value: number) {
+        this.view.y = value;
+    }
+
     public get bounds(): IPosSize {
-        return {x: this.x, y: this.y, width: this.view.width, height: this.view.height};
+        return {x: this.x, y: this.y, width: this.size.width, height: this.size.height};
     }
 
     public get isSkipCollision(): boolean {
