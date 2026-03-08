@@ -2,15 +2,24 @@ import type {IKeyCallback, IKeyEvents, IKeys, IKeysCallbacks} from '@/interfaces
 import {KeyEvents, Keys} from '@/const';
 
 class KeyboardService {
+    private static _instance: KeyboardService;
     private readonly keysCallbacks: IKeysCallbacks;
 
-    constructor() {
+    private constructor() {
         this.keysCallbacks = Object.values(Keys).reduce<IKeysCallbacks>((acc, key) => {
             acc[key] = {[KeyEvents.keyUp]: [], [KeyEvents.keyDown]: []};
             return acc;
         }, {} as IKeysCallbacks);
 
         this.initListeners();
+    }
+
+    public static get instance(): KeyboardService {
+        if (!this._instance) {
+            this._instance = new KeyboardService();
+        }
+
+        return this._instance;
     }
 
     private initListeners(): void {
