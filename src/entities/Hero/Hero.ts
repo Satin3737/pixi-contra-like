@@ -1,6 +1,6 @@
 import type {Container, ContainerOptions} from 'pixi.js';
-import type {IPosSize, IStates} from '@/interfaces';
-import {States} from '@/const';
+import type {IDirections, IPosSize, IStates} from '@/interfaces';
+import {Directions, States} from '@/const';
 import {HeroControls, HeroView} from './';
 
 class Hero {
@@ -12,8 +12,8 @@ class Hero {
 
     private state: IStates = States.stay;
     private velocity: {x: number; y: number} = {x: 0, y: 0};
-    private movement: {x: number; y: number} = {x: 0, y: 0};
-    private movementContext: {left: number; right: number} = {left: 0, right: 0};
+    private movement: {x: IDirections; y: IDirections} = {x: Directions.stop, y: Directions.stop};
+    private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private aimContext: {up: boolean; down: boolean} = {up: false, down: false};
 
     constructor(stage: Container, options?: ContainerOptions) {
@@ -49,22 +49,22 @@ class Hero {
     }
 
     public moveLeft(): void {
-        this.movementContext.left = -1;
-        this.movement.x = this.movementContext.right ? 0 : this.movementContext.left;
+        this.movementContext.left = Directions.left;
+        this.movement.x = this.movementContext.right ? Directions.stop : this.movementContext.left;
     }
 
     public moveRight(): void {
-        this.movementContext.right = 1;
-        this.movement.x = this.movementContext.left ? 0 : this.movementContext.right;
+        this.movementContext.right = Directions.right;
+        this.movement.x = this.movementContext.left ? Directions.stop : this.movementContext.right;
     }
 
     public stopMoveLeft(): void {
-        this.movementContext.left = 0;
+        this.movementContext.left = Directions.stop;
         this.movement.x = this.movementContext.right;
     }
 
     public stopMoveRight(): void {
-        this.movementContext.right = 0;
+        this.movementContext.right = Directions.stop;
         this.movement.x = this.movementContext.left;
     }
 
@@ -90,7 +90,7 @@ class Hero {
     public stay(y: number): void {
         this.state = States.stay;
         this.y = y - this.bounds.height;
-        this.velocity.y = 0;
+        this.velocity.y = Directions.stop;
     }
 
     public update(): void {
