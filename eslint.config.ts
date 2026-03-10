@@ -11,7 +11,25 @@ const customEsLintSettings: Linter.RulesRecord = {
         {argsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_', args: 'after-used', ignoreRestSiblings: true}
     ],
     '@typescript-eslint/no-explicit-any': ['error', {ignoreRestArgs: true}],
-    '@typescript-eslint/no-duplicate-enum-values': 'off'
+    '@typescript-eslint/no-duplicate-enum-values': 'off',
+    '@typescript-eslint/member-ordering': [
+        'warn',
+        {
+            default: [
+                'static-field',
+                'public-instance-field',
+                'protected-instance-field',
+                'private-instance-field',
+                'constructor',
+                ['public-get', 'public-set'],
+                'public-method',
+                ['protected-get', 'protected-set'],
+                'protected-method',
+                ['private-get', 'private-set'],
+                'private-method'
+            ]
+        }
+    ]
 };
 
 export default defineConfig([
