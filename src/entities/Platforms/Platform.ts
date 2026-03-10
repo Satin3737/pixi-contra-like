@@ -3,9 +3,9 @@ import type {IPlatform, IPlatformTypes, ISize} from '@/interfaces';
 import {PlatformSteppableHeight, PlatformTypes} from '@/const';
 
 class Platform extends Container {
-    private readonly view: Graphics = new Graphics();
     public readonly type: IPlatformTypes;
     public readonly isSteppable: boolean;
+    private readonly view: Graphics = new Graphics();
 
     constructor({type, size, options}: IPlatform) {
         super(options);

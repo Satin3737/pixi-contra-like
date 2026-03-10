@@ -11,7 +11,6 @@ class Hero {
     private readonly speed: number = 3;
 
     private state: IStates = States.stay;
-    private size: {width: number; height: number} = {width: 0, height: 0};
     private velocity: {x: number; y: number} = {x: 0, y: 0};
     private movement: {x: number; y: number} = {x: 0, y: 0};
     private movementContext: {left: number; right: number} = {left: 0, right: 0};
@@ -20,10 +19,33 @@ class Hero {
     constructor(stage: Container, options?: ContainerOptions) {
         this.stage = stage;
 
-        this.size = {width: 20, height: 80};
-        this.view = new HeroView({...options, ...this.size});
+        this.view = new HeroView(options);
         new HeroControls(this);
         this.stage.addChild(this.view);
+    }
+
+    public get x(): number {
+        return this.view.x;
+    }
+
+    public set x(value: number) {
+        this.view.x = value;
+    }
+
+    public get y(): number {
+        return this.view.y;
+    }
+
+    public set y(value: number) {
+        this.view.y = value;
+    }
+
+    public get bounds(): IPosSize {
+        return this.view.bounds;
+    }
+
+    public get isSkipCollision(): boolean {
+        return this.state === States.jump;
     }
 
     public moveLeft(): void {
@@ -69,30 +91,6 @@ class Hero {
         this.state = States.stay;
         this.y = y - this.bounds.height;
         this.velocity.y = 0;
-    }
-
-    public get x(): number {
-        return this.view.x;
-    }
-
-    public set x(value: number) {
-        this.view.x = value;
-    }
-
-    public get y(): number {
-        return this.view.y;
-    }
-
-    public set y(value: number) {
-        this.view.y = value;
-    }
-
-    public get bounds(): IPosSize {
-        return {x: this.x, y: this.y, width: this.size.width, height: this.size.height};
-    }
-
-    public get isSkipCollision(): boolean {
-        return this.state === States.jump;
     }
 
     public update(): void {
