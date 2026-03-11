@@ -1,5 +1,5 @@
 import {Container, type ContainerOptions, Graphics} from 'pixi.js';
-import type {IPosSize, IViewStates} from '@/interfaces';
+import type {IDirections, IPosSize, IViewStates} from '@/interfaces';
 import {ViewStates} from '@/const';
 
 class HeroView extends Container {
@@ -26,23 +26,25 @@ class HeroView extends Container {
             [ViewStates.jump]: this.drawJumpView()
         };
 
-        Object.values(this.states).forEach(view => this.view.addChild(view));
-
-        this.setState(this.state);
+        Object.entries(this.states).forEach(([state, view]) => {
+            view.visible = this.state === state;
+            this.view.addChild(view);
+        });
     }
 
     public get bounds(): IPosSize {
         return {x: this.x, y: this.y, width: this.bodySize.width, height: this.bodySize.height};
     }
 
-    private setState(state: IViewStates): void {
+    public show(state: IViewStates): void {
+        if (this.state === state) return;
+        Object.values(this.states).forEach(view => (view.visible = false));
+        this.states[state].visible = true;
         this.state = state;
+    }
 
-        Object.values(this.states).forEach(view => {
-            view.visible = false;
-        });
-
-        this.states[this.state].visible = true;
+    public flip(direction: IDirections) {
+        this.view.scale.x = direction;
     }
 
     private createView(): void {

@@ -4,8 +4,10 @@ import {Directions, States} from '@/const';
 import {HeroControls, HeroView} from './';
 
 class Hero {
+    public readonly view: HeroView;
+
     private readonly stage: Container;
-    private readonly view: HeroView;
+    private readonly controls: HeroControls;
     private readonly gravityForce: number = 0.2;
     private readonly jumpForce: number = 9;
     private readonly speed: number = 3;
@@ -20,7 +22,7 @@ class Hero {
         this.stage = stage;
 
         this.view = new HeroView(options);
-        new HeroControls(this);
+        this.controls = new HeroControls(this);
         this.stage.addChild(this.view);
     }
 
@@ -42,6 +44,10 @@ class Hero {
 
     public get bounds(): IPosSize {
         return this.view.bounds;
+    }
+
+    public get isInAir(): boolean {
+        return this.state === States.jump || this.state === States.fall;
     }
 
     public get isSkipCollision(): boolean {
@@ -91,6 +97,7 @@ class Hero {
         this.state = States.stay;
         this.y = y - this.bounds.height;
         this.velocity.y = Directions.stop;
+        this.controls.updateViewState();
     }
 
     public update(): void {
@@ -99,6 +106,7 @@ class Hero {
 
         if (this.velocity.y > 0 && (this.state === States.jump || this.state === States.stay)) {
             this.state = States.fall;
+            this.controls.updateViewState();
         }
 
         this.velocity.y += this.gravityForce;
