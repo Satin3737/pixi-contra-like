@@ -5,6 +5,10 @@ export type IKeys = IValueOf<typeof Keys>;
 
 export type IKeyEvents = IValueOf<typeof KeyEvents>;
 
-export type IKeyCallback = (event: KeyboardEvent) => void;
+export type IKeyUpDownCallback = (event: KeyboardEvent) => void;
 
-export type IKeysCallbacks = Record<IKeys, Record<IKeyEvents, IKeyCallback[]>>;
+export type IKeyPressedCallback = (isPressed: boolean, event: KeyboardEvent) => void;
+
+export type IKeyUpDownCallbacks = Record<IKeys, Record<IKeyEvents, IKeyUpDownCallback[]>>;
+
+export type IPressedCallbacks = Record<IKeys, IKeyPressedCallback[]>;

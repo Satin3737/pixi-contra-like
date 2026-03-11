@@ -1,17 +1,33 @@
-import type {IKeyCallback, IKeyEvents, IKeys, IKeysCallbacks} from '@/interfaces';
+import type {
+    IKeyEvents,
+    IKeyPressedCallback,
+    IKeyUpDownCallback,
+    IKeyUpDownCallbacks,
+    IKeys,
+    IPressedCallbacks
+} from '@/interfaces';
 import {KeyEvents, Keys} from '@/const';
 
 class KeyboardService {
     private static _instance: KeyboardService;
-    private readonly keysCallbacks: IKeysCallbacks;
+
+    private readonly pressedKeys: Set<IKeys> = new Set();
+    private readonly onUpDownKeysCallbacks: IKeyUpDownCallbacks;
+    private readonly onPressedKeysCallbacks: IPressedCallbacks;
 
     private constructor() {
-        this.keysCallbacks = Object.values(Keys).reduce<IKeysCallbacks>((acc, key) => {
+        this.onUpDownKeysCallbacks = Object.values(Keys).reduce<IKeyUpDownCallbacks>((acc, key) => {
             acc[key] = {[KeyEvents.keyUp]: [], [KeyEvents.keyDown]: []};
             return acc;
-        }, {} as IKeysCallbacks);
+        }, {} as IKeyUpDownCallbacks);
 
-        this.initListeners();
+        this.onPressedKeysCallbacks = Object.values(Keys).reduce<IPressedCallbacks>((acc, key) => {
+            acc[key] = [];
+            return acc;
+        }, {} as IPressedCallbacks);
+
+        this.initUpDownListeners();
+        this.initPressedListeners();
     }
 
     public static get instance(): KeyboardService {
@@ -22,27 +38,56 @@ class KeyboardService {
         return this._instance;
     }
 
-    public attachKey(key: IKeys, type: IKeyEvents, callback: IKeyCallback): void {
-        this.keysCallbacks[key][type].push(callback);
+    public attachKey(key: IKeys, type: IKeyEvents, callback: IKeyUpDownCallback): void {
+        this.onUpDownKeysCallbacks[key][type].push(callback);
     }
 
-    public detachKey(key: IKeys, type: IKeyEvents, callback: IKeyCallback): void {
-        this.keysCallbacks[key][type] = this.keysCallbacks[key][type].filter(cb => cb !== callback);
+    public detachKey(key: IKeys, type: IKeyEvents, callback: IKeyUpDownCallback): void {
+        this.onUpDownKeysCallbacks[key][type] = this.onUpDownKeysCallbacks[key][type].filter(cb => cb !== callback);
     }
 
-    private initListeners(): void {
+    public subscribeToPressedKeys(key: IKeys, callback: IKeyPressedCallback): void {
+        this.onPressedKeysCallbacks[key].push(callback);
+    }
+
+    public unsubscribeFromPressedKeys(key: IKeys, callback: IKeyPressedCallback): void {
+        this.onPressedKeysCallbacks[key] = this.onPressedKeysCallbacks[key].filter(cb => cb !== callback);
+    }
+
+    public isPressed(key: IKeys): boolean {
+        return this.pressedKeys.has(key);
+    }
+
+    private initUpDownListeners(): void {
         Object.values(KeyEvents).forEach(eventType => {
-            document.addEventListener(eventType, event => this.onKeyEvent(event, eventType));
+            document.addEventListener(eventType, event => this.onUpDownKeyEvent(event, eventType));
+        });
+    }
+
+    private initPressedListeners(): void {
+        Object.values(Keys).forEach(key => {
+            this.attachKey(key, KeyEvents.keyDown, event => {
+                this.pressedKeys.add(key);
+                this.notifyPressedKeys(key, true, event);
+            });
+            this.attachKey(key, KeyEvents.keyUp, event => {
+                this.pressedKeys.delete(key);
+                this.notifyPressedKeys(key, false, event);
+            });
         });
     }
 
     private isKeyExists(keyCode: string): keyCode is IKeys {
-        return keyCode in this.keysCallbacks;
+        return keyCode in this.onUpDownKeysCallbacks;
     }
 
-    private onKeyEvent(event: KeyboardEvent, type: IKeyEvents): void {
+    private onUpDownKeyEvent(event: KeyboardEvent, type: IKeyEvents): void {
         if (!this.isKeyExists(event.code)) return;
-        this.keysCallbacks[event.code][type].forEach(cb => cb(event));
+        this.onUpDownKeysCallbacks[event.code][type].forEach(cb => cb(event));
+    }
+
+    private notifyPressedKeys(key: IKeys, isPressed: boolean, event: KeyboardEvent): void {
+        this.onPressedKeysCallbacks[key].forEach(callback => callback(isPressed, event));
     }
 }
 
