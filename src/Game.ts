@@ -1,23 +1,27 @@
-import type {Application} from 'pixi.js';
+import {type Application, Container} from 'pixi.js';
 import type {ICollision, IPos, IPosSize} from '@/interfaces';
 import {PlatformTypes} from '@/const';
 import {PlatformsData} from '@/data';
+import {Camera} from '@/services';
 import {Hero, Platform, PlatformFactory} from '@/entities';
 
 class Game {
-    private readonly app: Application;
-    private readonly platformFactory: PlatformFactory = new PlatformFactory();
-    private readonly platforms: Platform[] = [];
     private readonly hero: Hero;
+    private readonly camera: Camera;
+    private readonly platforms: Platform[] = [];
 
     constructor(app: Application) {
-        this.app = app;
-        this.hero = new Hero(this.app.stage, {x: 100, y: 0});
+        const world = new Container();
+        app.stage.addChild(world);
 
-        PlatformsData.forEach(pos => this.platforms.push(this.platformFactory.createPlatform(pos)));
+        this.hero = new Hero(world, {x: 100, y: 0});
 
-        this.app.stage.addChild(...this.platforms);
-        this.app.ticker.add(this.update, this);
+        const platformFactory = new PlatformFactory(world);
+        PlatformsData.forEach(pos => this.platforms.push(platformFactory.createPlatform(pos)));
+
+        this.camera = new Camera({target: this.hero, world, screenSize: app.screen, isBackScroll: true});
+
+        app.ticker.add(this.update, this);
     }
 
     private isAABBCollision(a: IPosSize, b: IPosSize): boolean {
@@ -53,6 +57,8 @@ class Game {
                 }
             }
         }
+
+        this.camera.update();
     }
 }
 

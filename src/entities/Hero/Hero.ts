@@ -6,7 +6,6 @@ import {HeroControls, HeroView} from './';
 class Hero {
     public readonly view: HeroView;
 
-    private readonly stage: Container;
     private readonly controls: HeroControls;
     private readonly gravityForce: number = 0.2;
     private readonly jumpForce: number = 9;
@@ -18,12 +17,10 @@ class Hero {
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private aimContext: {up: boolean; down: boolean} = {up: false, down: false};
 
-    constructor(stage: Container, options?: ContainerOptions) {
-        this.stage = stage;
-
+    constructor(world: Container, options?: ContainerOptions) {
         this.view = new HeroView(options);
         this.controls = new HeroControls(this);
-        this.stage.addChild(this.view);
+        world.addChild(this.view);
     }
 
     public get x(): number {
