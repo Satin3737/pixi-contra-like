@@ -19,7 +19,7 @@ class Game {
         const platformFactory = new PlatformFactory(world);
         PlatformsData.forEach(pos => this.platforms.push(platformFactory.createPlatform(pos)));
 
-        this.camera = new Camera({target: this.hero, world, screenSize: app.screen, isBackScroll: true});
+        this.camera = new Camera({target: this.hero, world, screenSize: app.screen, isBackScroll: false});
 
         app.ticker.add(this.update, this);
     }
