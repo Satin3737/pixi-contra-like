@@ -1,3 +1,4 @@
+export * from './camera';
 export * from './collision';
 export * from './entities';
 export * from './hero';
