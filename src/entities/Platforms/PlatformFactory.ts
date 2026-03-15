@@ -1,6 +1,6 @@
 import type {Container} from 'pixi.js';
-import type {IPlatform} from '@/interfaces';
 import Platform from './Platform';
+import type {IPlatform} from './types';
 
 class PlatformFactory {
     private readonly world: Container;

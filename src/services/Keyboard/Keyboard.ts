@@ -1,15 +1,16 @@
-import type {
-    IKeyEvents,
-    IKeyPressedCallback,
-    IKeyUpDownCallback,
-    IKeyUpDownCallbacks,
-    IKeys,
-    IPressedCallbacks
-} from '@/interfaces';
-import {KeyEvents, Keys} from '@/const';
+import {
+    type IKeyEvents,
+    type IKeyPressedCallback,
+    type IKeyUpDownCallback,
+    type IKeyUpDownCallbacks,
+    type IKeys,
+    type IPressedCallbacks,
+    KeyEvents,
+    Keys
+} from './types';
 
-class KeyboardService {
-    private static _instance: KeyboardService;
+class Keyboard {
+    private static _instance: Keyboard;
 
     private readonly pressedKeys: Set<IKeys> = new Set();
     private readonly onUpDownKeysCallbacks: IKeyUpDownCallbacks;
@@ -30,9 +31,9 @@ class KeyboardService {
         this.initPressedListeners();
     }
 
-    public static get instance(): KeyboardService {
+    public static get instance(): Keyboard {
         if (!this._instance) {
-            this._instance = new KeyboardService();
+            this._instance = new Keyboard();
         }
 
         return this._instance;
@@ -91,4 +92,4 @@ class KeyboardService {
     }
 }
 
-export default KeyboardService;
+export default Keyboard;

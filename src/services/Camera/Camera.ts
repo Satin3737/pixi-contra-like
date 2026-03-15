@@ -1,6 +1,6 @@
 import type {Container} from 'pixi.js';
-import type {ICamera} from '@/interfaces';
 import {Hero} from '@/entities';
+import type {ICamera} from './types';
 
 class Camera {
     private readonly target: Hero;

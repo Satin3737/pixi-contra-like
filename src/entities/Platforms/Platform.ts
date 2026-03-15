@@ -1,6 +1,6 @@
 import {Container, Graphics} from 'pixi.js';
-import type {IPlatform, IPlatformTypes, ISize} from '@/interfaces';
-import {PlatformSteppableHeight, PlatformTypes} from '@/const';
+import type {ISize} from '@/types';
+import {type IPlatform, type IPlatformTypes, PlatformSteppableHeight, PlatformTypes} from './types';
 
 class Platform extends Container {
     public readonly type: IPlatformTypes;

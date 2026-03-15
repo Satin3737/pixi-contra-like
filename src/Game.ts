@@ -1,9 +1,8 @@
 import {type Application, Container} from 'pixi.js';
-import type {ICollision, IPos, IPosSize} from '@/interfaces';
-import {PlatformTypes} from '@/const';
+import type {ICollision, IPos, IPosSize} from '@/types';
 import {PlatformsData} from '@/data';
 import {Camera} from '@/services';
-import {Hero, Platform, PlatformFactory} from '@/entities';
+import {Hero, Platform, PlatformFactory, PlatformTypes} from '@/entities';
 
 class Game {
     private readonly hero: Hero;

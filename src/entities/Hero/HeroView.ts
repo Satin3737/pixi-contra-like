@@ -1,6 +1,6 @@
 import {Container, type ContainerOptions, Graphics} from 'pixi.js';
-import type {IDirections, IPosSize, IViewStates} from '@/interfaces';
-import {ViewStates} from '@/const';
+import type {IPosSize} from '@/types';
+import {type IDirections, type IViewStates, ViewStates} from './types';
 
 class HeroView extends Container {
     private readonly view = new Container();

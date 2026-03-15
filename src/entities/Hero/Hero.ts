@@ -1,7 +1,8 @@
 import type {Container, ContainerOptions} from 'pixi.js';
-import type {IDirections, IPosSize, IStates} from '@/interfaces';
-import {Directions, States} from '@/const';
-import {HeroControls, HeroView} from './';
+import type {IPosSize} from '@/types';
+import HeroControls from './HeroControls';
+import HeroView from './HeroView';
+import {Directions, type IDirections, type IStates, States} from './types';
 
 class Hero {
     public readonly view: HeroView;

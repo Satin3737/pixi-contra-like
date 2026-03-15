@@ -1,5 +1,4 @@
-import type {IPlatform} from '@/interfaces';
-import {PlatformTypes} from '@/const';
+import {type IPlatform, PlatformTypes} from '@/entities';
 
 export const PlatformsData: IPlatform[] = [
     {type: PlatformTypes.normal, size: {width: 200, height: 30}, options: {x: 100, y: 400}},

@@ -1,11 +1,10 @@
-import type {IViewStates} from '@/interfaces';
-import {Directions, KeyEvents, Keys, ViewStates} from '@/const';
-import {KeyboardService} from '@/services';
-import type {Hero} from '../';
+import {KeyEvents, Keyboard, Keys} from '@/services';
+import type Hero from './Hero';
+import {Directions, type IViewStates, ViewStates} from './types';
 
 class HeroControls {
     private readonly hero: Hero;
-    private readonly keyboard: KeyboardService = KeyboardService.instance;
+    private readonly keyboard: Keyboard = Keyboard.instance;
 
     constructor(hero: Hero) {
         this.hero = hero;
