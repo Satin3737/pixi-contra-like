@@ -7,18 +7,19 @@ import {Hero, Platform, PlatformFactory, PlatformTypes} from '@/entities';
 class Game {
     private readonly hero: Hero;
     private readonly camera: Camera;
+    private readonly world: Container;
     private readonly platforms: Platform[] = [];
 
     constructor(app: Application) {
-        const world = new Container();
-        app.stage.addChild(world);
+        this.world = new Container();
+        app.stage.addChild(this.world);
 
-        this.hero = new Hero(world, {x: 100, y: 0});
+        this.hero = new Hero(this.world, {x: 100, y: 0});
 
-        const platformFactory = new PlatformFactory(world);
+        const platformFactory = new PlatformFactory(this.world);
         PlatformsData.forEach(pos => this.platforms.push(platformFactory.createPlatform(pos)));
 
-        this.camera = new Camera({target: this.hero, world, screenSize: app.screen, isBackScroll: false});
+        this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
 
         app.ticker.add(this.update, this);
     }
@@ -37,6 +38,10 @@ class Game {
 
     private update(): void {
         const prevHeroPos = this.hero.bounds;
+
+        this.hero.heroBullets.forEach(bullet => {
+            bullet.isOutOfBounds(this.camera.visibleAreaBounds) && bullet.destroy();
+        });
 
         this.hero.update();
 

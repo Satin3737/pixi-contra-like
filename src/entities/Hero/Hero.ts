@@ -1,13 +1,17 @@
-import type {Container, ContainerOptions} from 'pixi.js';
+import {type Container, type ContainerOptions} from 'pixi.js';
 import type {IPosSize} from '@/types';
+import {Bullet, BulletFactory} from '../Bullets';
+import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
 import {Directions, type IDirections, type IStates, States} from './types';
 
 class Hero {
     public readonly view: HeroView;
+    public readonly aim: HeroAim;
 
     private readonly controls: HeroControls;
+    private readonly bulletFactory: BulletFactory;
     private readonly gravityForce: number = 0.2;
     private readonly jumpForce: number = 9;
     private readonly speed: number = 3;
@@ -16,11 +20,13 @@ class Hero {
     private velocity: {x: number; y: number} = {x: 0, y: 0};
     private movement: {x: IDirections; y: IDirections} = {x: Directions.stop, y: Directions.stop};
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
-    private aimContext: {up: boolean; down: boolean} = {up: false, down: false};
+    private bullets: Bullet[] = [];
 
     constructor(world: Container, options?: ContainerOptions) {
         this.view = new HeroView(options);
+        this.aim = new HeroAim(this);
         this.controls = new HeroControls(this);
+        this.bulletFactory = new BulletFactory(world);
         world.addChild(this.view);
     }
 
@@ -52,6 +58,10 @@ class Hero {
         return this.state === States.jump;
     }
 
+    public get heroBullets(): Bullet[] {
+        return this.bullets;
+    }
+
     public moveLeft(): void {
         this.movementContext.left = Directions.left;
         this.movement.x = this.movementContext.right ? Directions.stop : this.movementContext.left;
@@ -72,30 +82,20 @@ class Hero {
         this.movement.x = this.movementContext.left;
     }
 
-    public lookUp(): void {
-        this.aimContext.up = true;
-    }
-
-    public lookDown(): void {
-        this.aimContext.down = true;
-    }
-
-    public lookForward(): void {
-        this.aimContext.down = false;
-        this.aimContext.up = false;
-    }
-
-    public jump(): void {
+    public jump(isDown: boolean): void {
         if (this.state === States.jump || this.state === States.fall) return;
         this.state = States.jump;
-        !this.aimContext.down && (this.velocity.y = -this.jumpForce);
+        !isDown && (this.velocity.y = -this.jumpForce);
     }
 
     public stay(y: number): void {
         this.state = States.stay;
         this.y = y - this.bounds.height;
         this.velocity.y = Directions.stop;
-        this.controls.updateViewState();
+    }
+
+    public shoot(): void {
+        this.bullets.push(this.bulletFactory.createBullet(this.aim.getAim()));
     }
 
     public update(): void {
@@ -104,11 +104,15 @@ class Hero {
 
         if (this.velocity.y > 0 && (this.state === States.jump || this.state === States.stay)) {
             this.state = States.fall;
-            this.controls.updateViewState();
         }
 
         this.velocity.y += this.gravityForce;
         this.y += this.velocity.y;
+
+        this.controls.update();
+
+        this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
+        this.bullets.forEach(bullet => bullet.update());
     }
 }
 

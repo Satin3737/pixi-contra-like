@@ -5,7 +5,8 @@ export const Keys = {
     down: 'ArrowDown',
     left: 'ArrowLeft',
     right: 'ArrowRight',
-    space: 'Space'
+    space: 'Space',
+    a: 'KeyA'
 } as const;
 
 export const KeyEvents = {

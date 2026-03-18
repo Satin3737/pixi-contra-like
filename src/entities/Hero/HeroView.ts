@@ -1,6 +1,6 @@
 import {Container, type ContainerOptions, Graphics} from 'pixi.js';
 import type {IPosSize} from '@/types';
-import {type IDirections, type IViewStates, ViewStates} from './types';
+import {Directions, type IDirections, type IViewStates, ViewStates} from './types';
 
 class HeroView extends Container {
     private readonly view = new Container();
@@ -34,6 +34,13 @@ class HeroView extends Container {
 
     public get bounds(): IPosSize {
         return {x: this.x, y: this.y, width: this.bodySize.width, height: this.bodySize.height};
+    }
+
+    public get direction(): IDirections {
+        const scaleX = this.view.scale.x;
+        if (scaleX === Directions.left) return Directions.left;
+        if (scaleX === Directions.right) return Directions.right;
+        return Directions.stop;
     }
 
     public show(state: IViewStates): void {
