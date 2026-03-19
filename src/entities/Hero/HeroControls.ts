@@ -1,6 +1,7 @@
+import {Directions, type IDirections} from '@/types';
 import {KeyEvents, Keyboard, Keys} from '@/services';
 import type Hero from './Hero';
-import {AimConfigs, Directions, type IDirections, type IViewStates, ViewStates} from './types';
+import {AimConfigs, HeroViewStates, type IHeroViewStates} from './types';
 
 class HeroControls {
     private readonly hero: Hero;
@@ -48,15 +49,15 @@ class HeroControls {
         return this.isLeft !== this.isRight;
     }
 
-    private get currentViewState(): IViewStates {
-        let state: IViewStates = ViewStates.stay;
+    private get currentViewState(): IHeroViewStates {
+        let state: IHeroViewStates = HeroViewStates.stay;
 
-        if (this.hero.isInAir) state = ViewStates.jump;
-        else if (this.isMovingX && this.isUp) state = ViewStates.runUp;
-        else if (this.isMovingX && this.isDown) state = ViewStates.runDown;
-        else if (this.isMovingX) state = ViewStates.run;
-        else if (this.isUp) state = ViewStates.stayUp;
-        else if (this.isDown) state = ViewStates.lay;
+        if (this.hero.isInAir) state = HeroViewStates.jump;
+        else if (this.isMovingX && this.isUp) state = HeroViewStates.runUp;
+        else if (this.isMovingX && this.isDown) state = HeroViewStates.runDown;
+        else if (this.isMovingX) state = HeroViewStates.run;
+        else if (this.isUp) state = HeroViewStates.stayUp;
+        else if (this.isDown) state = HeroViewStates.lay;
 
         return state;
     }

@@ -56,9 +56,7 @@ class Game {
             }
 
             if (collision.horizontal) {
-                if (platform.isSteppable) {
-                    this.hero.stay(platform.y);
-                }
+                platform.isSteppable && this.hero.stay(platform.y);
             }
         }
 

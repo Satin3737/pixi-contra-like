@@ -1,14 +1,14 @@
 import {Container, type ContainerOptions, Graphics} from 'pixi.js';
-import type {IPosSize} from '@/types';
-import {Directions, type IDirections, type IViewStates, ViewStates} from './types';
+import {Directions, type IDirections, type IPosSize} from '@/types';
+import {HeroViewStates, type IHeroViewStates} from './types';
 
 class HeroView extends Container {
     private readonly view = new Container();
     private readonly stroke: {width: number; color: number} = {width: 2, color: 0x0000ff};
-    private readonly states: Record<IViewStates, Graphics>;
+    private readonly states: Record<IHeroViewStates, Graphics>;
 
     private bodySize: {width: number; height: number} = {width: 20, height: 80};
-    private state: IViewStates = ViewStates.stay;
+    private state: IHeroViewStates = HeroViewStates.stay;
 
     constructor(options?: ContainerOptions) {
         super(options);
@@ -16,14 +16,14 @@ class HeroView extends Container {
         this.createView();
 
         this.states = {
-            [ViewStates.stay]: this.drawStayView(),
-            [ViewStates.stayUp]: this.drawStayUpView(),
-            [ViewStates.stayDown]: this.drawStayDownView(),
-            [ViewStates.run]: this.drawRunView(),
-            [ViewStates.runUp]: this.drawRunUpView(),
-            [ViewStates.runDown]: this.drawRunDownView(),
-            [ViewStates.lay]: this.drawLayView(),
-            [ViewStates.jump]: this.drawJumpView()
+            [HeroViewStates.stay]: this.drawStayView(),
+            [HeroViewStates.stayUp]: this.drawStayUpView(),
+            [HeroViewStates.stayDown]: this.drawStayDownView(),
+            [HeroViewStates.run]: this.drawRunView(),
+            [HeroViewStates.runUp]: this.drawRunUpView(),
+            [HeroViewStates.runDown]: this.drawRunDownView(),
+            [HeroViewStates.lay]: this.drawLayView(),
+            [HeroViewStates.jump]: this.drawJumpView()
         };
 
         Object.entries(this.states).forEach(([state, view]) => {
@@ -43,7 +43,7 @@ class HeroView extends Container {
         return Directions.stop;
     }
 
-    public show(state: IViewStates): void {
+    public show(state: IHeroViewStates): void {
         if (this.state === state) return;
         Object.values(this.states).forEach(view => (view.visible = false));
         this.states[state].visible = true;

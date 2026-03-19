@@ -1,10 +1,10 @@
 import {type Container, type ContainerOptions} from 'pixi.js';
-import type {IPosSize} from '@/types';
+import {Directions, type IDirections, type IPosSize} from '@/types';
 import {Bullet, BulletFactory} from '../Bullets';
 import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
-import {Directions, type IDirections, type IStates, States} from './types';
+import {HeroStates, type IHeroStates} from './types';
 
 class Hero {
     public readonly view: HeroView;
@@ -16,7 +16,7 @@ class Hero {
     private readonly jumpForce: number = 9;
     private readonly speed: number = 3;
 
-    private state: IStates = States.stay;
+    private state: IHeroStates = HeroStates.stay;
     private velocity: {x: number; y: number} = {x: 0, y: 0};
     private movement: {x: IDirections; y: IDirections} = {x: Directions.stop, y: Directions.stop};
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
@@ -51,11 +51,11 @@ class Hero {
     }
 
     public get isInAir(): boolean {
-        return this.state === States.jump || this.state === States.fall;
+        return this.state === HeroStates.jump || this.state === HeroStates.fall;
     }
 
     public get isSkipCollision(): boolean {
-        return this.state === States.jump;
+        return this.state === HeroStates.jump;
     }
 
     public get heroBullets(): Bullet[] {
@@ -83,13 +83,13 @@ class Hero {
     }
 
     public jump(isDown: boolean): void {
-        if (this.state === States.jump || this.state === States.fall) return;
-        this.state = States.jump;
+        if (this.state === HeroStates.jump || this.state === HeroStates.fall) return;
+        this.state = HeroStates.jump;
         !isDown && (this.velocity.y = -this.jumpForce);
     }
 
     public stay(y: number): void {
-        this.state = States.stay;
+        this.state = HeroStates.stay;
         this.y = y - this.bounds.height;
         this.velocity.y = Directions.stop;
     }
@@ -102,8 +102,8 @@ class Hero {
         this.velocity.x = this.movement.x * this.speed;
         this.x += this.velocity.x;
 
-        if (this.velocity.y > 0 && (this.state === States.jump || this.state === States.stay)) {
-            this.state = States.fall;
+        if (this.velocity.y > 0 && (this.state === HeroStates.jump || this.state === HeroStates.stay)) {
+            this.state = HeroStates.fall;
         }
 
         this.velocity.y += this.gravityForce;
