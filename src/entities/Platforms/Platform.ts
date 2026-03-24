@@ -8,18 +8,21 @@ class Platform extends Container {
 
     private readonly view: Graphics = new Graphics();
 
-    constructor({type, size, options}: IPlatform) {
+    constructor({type, size, isSteppable, options}: IPlatform) {
         super(options);
-
         this.type = type;
         this.drawPlatform(size);
-        this.isSteppable = this.type === PlatformTypes.solid && this.height >= PlatformSteppableHeight;
+        this.isSteppable = isSteppable ?? (this.isSolid && this.height >= PlatformSteppableHeight);
+    }
+
+    private get isSolid(): boolean {
+        return this.type === PlatformTypes.solid;
     }
 
     private drawPlatform({width, height}: ISize): void {
         this.view.setSize({width, height});
         this.view.rect(0, 0, width, height).stroke({width: 1, color: 0x00ff00});
-        this.type === PlatformTypes.solid && this.view.lineTo(width, height).stroke({width: 1, color: 0x00ff00});
+        this.isSolid && this.view.lineTo(width, height).stroke({width: 1, color: 0x00ff00});
         this.addChild(this.view);
     }
 }

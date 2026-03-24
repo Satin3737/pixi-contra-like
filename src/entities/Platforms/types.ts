@@ -4,6 +4,7 @@ import type {ISize, IValueOf} from '@/types';
 export interface IPlatform {
     type: IPlatformTypes;
     size: ISize;
+    isSteppable?: boolean;
     options?: ContainerOptions;
 }
 
