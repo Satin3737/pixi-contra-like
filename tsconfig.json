@@ -1,15 +1,14 @@
 {
     "compilerOptions": {
-        "baseUrl": "src",
         "paths": {
-            "@/*": ["*"]
+            "@/*": ["./src/*"]
         },
 
-        "target": "ES2022",
+        "target": "es2023",
         "useDefineForClassFields": true,
         "module": "ESNext",
-        "lib": ["ES2022", "DOM", "DOM.Iterable"],
-        "types": ["vite/client"],
+        "lib": ["es2023", "DOM", "DOM.Iterable"],
+        "types": ["node", "vite/client"],
         "skipLibCheck": true,
 
         /* Bundler mode */
@@ -24,8 +23,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "erasableSyntaxOnly": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUncheckedSideEffectImports": true
+        "noFallthroughCasesInSwitch": true
     },
-    "include": ["src"]
+    "include": ["./src"]
 }

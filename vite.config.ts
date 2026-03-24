@@ -12,6 +12,7 @@ export default defineConfig({
         }
     },
     server: {
+        forwardConsole: true,
         port: 5177
     }
 });
