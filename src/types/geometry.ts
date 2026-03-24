@@ -21,3 +21,8 @@ export interface ISize {
 }
 
 export type IPosSize = IPos & ISize;
+
+export interface ICollision {
+    vertical: boolean;
+    horizontal: boolean;
+}
