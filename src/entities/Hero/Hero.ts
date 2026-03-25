@@ -1,5 +1,5 @@
 import {type Container, type ContainerOptions} from 'pixi.js';
-import {Directions, type IDirections, type IPosSize} from '@/types';
+import {Directions, type IDirections, type IPos, type IPosSize} from '@/types';
 import {Bullet, BulletFactory} from '../Bullets';
 import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
@@ -17,7 +17,7 @@ class Hero {
     private readonly speed: number = 3;
 
     private state: IHeroStates = HeroStates.stay;
-    private velocity: {x: number; y: number} = {x: 0, y: 0};
+    private velocity: IPos = {x: 0, y: 0};
     private movement: {x: IDirections; y: IDirections} = {x: Directions.stop, y: Directions.stop};
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private bullets: Bullet[] = [];
@@ -83,12 +83,12 @@ class Hero {
     }
 
     public jump(isDown: boolean): void {
-        if (this.state === HeroStates.jump || this.state === HeroStates.fall) return;
+        if (this.isInAir) return;
         this.state = HeroStates.jump;
         !isDown && (this.velocity.y = -this.jumpForce);
     }
 
-    public stay(y: number): void {
+    public land(y: number, _: boolean): void {
         this.state = HeroStates.stay;
         this.y = y - this.bounds.height;
         this.velocity.y = Directions.stop;

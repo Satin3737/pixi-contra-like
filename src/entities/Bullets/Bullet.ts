@@ -11,13 +11,8 @@ class Bullet extends Container {
         this.drawBullet();
     }
 
-    public isOutOfBounds(cameraBounds: IPosSize): boolean {
-        return (
-            this.x > cameraBounds.width - cameraBounds.x ||
-            this.x < -cameraBounds.x ||
-            this.y > cameraBounds.height - cameraBounds.y ||
-            this.y < -cameraBounds.y
-        );
+    public get bounds(): IPosSize {
+        return {x: this.x, y: this.y, width: this.width, height: this.height};
     }
 
     public update(): void {
