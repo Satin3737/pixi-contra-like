@@ -1,6 +1,6 @@
-import type {IRunner} from '@/entities/enemies/Runner';
+import type {IPos} from '@/types';
 
-export const EnemiesData: IRunner[] = [
+export const EnemiesData: IPos[] = [
     {x: 1000, y: 320},
     {x: 1200, y: 470},
     {x: 800, y: 470}

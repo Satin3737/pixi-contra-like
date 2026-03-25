@@ -15,8 +15,3 @@ export const RunnerViewStates = {
 } as const;
 
 export type IRunnerViewStates = IValueOf<typeof RunnerViewStates>;
-
-export interface IRunner {
-    x: number;
-    y: number;
-}
