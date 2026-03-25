@@ -1,5 +1,5 @@
 import {type Container, type ContainerOptions} from 'pixi.js';
-import {Directions, type IDirections, type IPos, type IPosSize} from '@/types';
+import {Directions, type IDirections, type IPos, type IPosSize, type ITicker} from '@/types';
 import {Bullet, BulletFactory} from '../Bullets';
 import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
@@ -12,9 +12,9 @@ class Hero {
 
     private readonly controls: HeroControls;
     private readonly bulletFactory: BulletFactory;
-    private readonly gravityForce: number = 0.2;
-    private readonly jumpForce: number = 9;
-    private readonly speed: number = 3;
+    private readonly gravityForce: number = 0.4;
+    private readonly jumpForce: number = 8;
+    private readonly speed: number = 6;
 
     private state: IHeroStates = HeroStates.stay;
     private velocity: IPos = {x: 0, y: 0};
@@ -98,21 +98,21 @@ class Hero {
         this.bullets.push(this.bulletFactory.createBullet(this.aim.getAim()));
     }
 
-    public update(): void {
-        this.velocity.x = this.movement.x * this.speed;
+    public update({deltaTime}: ITicker): void {
+        this.velocity.x = this.movement.x * this.speed * deltaTime;
         this.x += this.velocity.x;
 
         if (this.velocity.y > 0 && (this.state === HeroStates.jump || this.state === HeroStates.stay)) {
             this.state = HeroStates.fall;
         }
 
-        this.velocity.y += this.gravityForce;
+        this.velocity.y += this.gravityForce * deltaTime;
         this.y += this.velocity.y;
 
         this.controls.update();
 
+        this.bullets.forEach(bullet => !bullet.destroyed && bullet.update({deltaTime}));
         this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
-        this.bullets.forEach(bullet => bullet.update());
     }
 }
 

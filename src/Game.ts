@@ -1,5 +1,5 @@
 import {type Application, Container} from 'pixi.js';
-import type {ICollision, IPos, IPosSize} from '@/types';
+import type {ICollision, IPos, IPosSize, ITicker} from '@/types';
 import {EnemiesData, PlatformsData} from '@/data';
 import {Camera} from '@/services';
 import {Hero, Platform, PlatformFactory, PlatformTypes} from '@/entities';
@@ -66,11 +66,11 @@ class Game {
         }
     }
 
-    private update(): void {
+    private update({deltaTime}: ITicker): void {
         const heroPrevPos = this.hero.bounds;
         const enemyPrevPositions: IPosSize[] = [];
 
-        this.hero.update();
+        this.hero.update({deltaTime});
 
         this.enemies.forEach(enemy => {
             if (enemy.destroyed) return;
@@ -86,17 +86,15 @@ class Game {
                 if (this.isAABBCollision(bullet.bounds, enemy.bounds)) {
                     bullet.destroy();
                     enemy.destroy();
-                    break;
+                    return;
                 }
             }
+
+            enemyPrevPositions.push(enemy.bounds);
+            !enemy.destroyed && enemy.update({deltaTime});
         });
 
         this.enemies = this.enemies.filter(enemy => !enemy.destroyed);
-
-        this.enemies.forEach(enemy => {
-            enemyPrevPositions.push(enemy.bounds);
-            enemy.update();
-        });
 
         this.hero.heroBullets.forEach(bullet => {
             if (bullet.destroyed) return;

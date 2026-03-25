@@ -26,3 +26,7 @@ export interface ICollision {
     vertical: boolean;
     horizontal: boolean;
 }
+
+export interface ITicker {
+    deltaTime: number;
+}

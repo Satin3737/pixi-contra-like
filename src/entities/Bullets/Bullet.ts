@@ -1,10 +1,10 @@
 import {Container, Graphics} from 'pixi.js';
-import type {IPosSize} from '@/types';
+import type {IPosSize, ITicker} from '@/types';
 import type {IBullet} from './types';
 
 class Bullet extends Container {
     private readonly view: Graphics = new Graphics();
-    private readonly speed: number = 12;
+    private readonly speed: number = 24;
 
     constructor(options: IBullet) {
         super(options);
@@ -15,9 +15,9 @@ class Bullet extends Container {
         return {x: this.x, y: this.y, width: this.width, height: this.height};
     }
 
-    public update(): void {
-        this.x += this.speed * Math.cos(this.rotation);
-        this.y += this.speed * Math.sin(this.rotation);
+    public update({deltaTime}: ITicker): void {
+        this.x += this.speed * Math.cos(this.rotation) * deltaTime;
+        this.y += this.speed * Math.sin(this.rotation) * deltaTime;
     }
 
     private drawBullet(): void {
