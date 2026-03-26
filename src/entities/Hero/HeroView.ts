@@ -1,19 +1,15 @@
-import {Container, type ContainerOptions, Graphics} from 'pixi.js';
-import {Directions, type IDirections, type IPosSize} from '@/types';
+import {type ContainerOptions, Graphics} from 'pixi.js';
+import {EntityView} from '../Entity';
 import {HeroViewStates, type IHeroViewStates} from './types';
 
-class HeroView extends Container {
-    private readonly view = new Container();
+class HeroView extends EntityView {
     private readonly stroke: {width: number; color: number} = {width: 2, color: 0x0000ff};
     private readonly states: Record<IHeroViewStates, Graphics>;
 
-    private bodySize: {width: number; height: number} = {width: 20, height: 80};
     private state: IHeroViewStates = HeroViewStates.stay;
 
     constructor(options?: ContainerOptions) {
-        super(options);
-
-        this.createView();
+        super({width: 20, height: 80}, options);
 
         this.states = {
             [HeroViewStates.stay]: this.drawStayView(),
@@ -32,33 +28,11 @@ class HeroView extends Container {
         });
     }
 
-    public get bounds(): IPosSize {
-        return {x: this.x, y: this.y, width: this.bodySize.width, height: this.bodySize.height};
-    }
-
-    public get direction(): IDirections {
-        const scaleX = this.view.scale.x;
-        if (scaleX === Directions.left) return Directions.left;
-        if (scaleX === Directions.right) return Directions.right;
-        return Directions.stop;
-    }
-
     public show(state: IHeroViewStates): void {
         if (this.state === state) return;
         Object.values(this.states).forEach(view => (view.visible = false));
         this.states[state].visible = true;
         this.state = state;
-    }
-
-    public flip(direction: IDirections) {
-        this.view.scale.x = direction;
-    }
-
-    private createView(): void {
-        const halfWidth = this.bounds.width * 0.5;
-        this.view.pivot.x = halfWidth;
-        this.view.x = halfWidth;
-        this.addChild(this.view);
     }
 
     private drawStayView(): Graphics {

@@ -1,10 +1,10 @@
 import type {Container} from 'pixi.js';
 import type {IPosSize} from '@/types';
-import {Hero} from '@/entities';
+import {Entity} from '@/entities';
 import type {ICamera} from './types';
 
 class Camera {
-    private readonly target: Hero;
+    private readonly target: Entity;
     private readonly world: Container;
     private readonly isBackScroll: boolean;
     private readonly centerScreenPosX: number;

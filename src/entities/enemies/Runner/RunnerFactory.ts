@@ -1,6 +1,7 @@
 import type {Container} from 'pixi.js';
 import type {IPos} from '@/types';
 import Runner from './Runner';
+import RunnerView from './RunnerView';
 
 class RunnerFactory {
     private readonly world: Container;
@@ -10,7 +11,10 @@ class RunnerFactory {
     }
 
     public createRunner(params: IPos): Runner {
-        return new Runner(this.world, params);
+        const runnerView = new RunnerView(params);
+        const runner = new Runner(runnerView);
+        this.world.addChild(runnerView);
+        return runner;
     }
 }
 

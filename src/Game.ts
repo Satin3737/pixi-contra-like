@@ -2,8 +2,7 @@ import {type Application, Container} from 'pixi.js';
 import type {ICollision, IPos, IPosSize, ITicker} from '@/types';
 import {EnemiesData, PlatformsData} from '@/data';
 import {Camera} from '@/services';
-import {Hero, Platform, PlatformFactory, PlatformTypes} from '@/entities';
-import {Runner, RunnerFactory} from '@/entities/enemies/Runner';
+import {Entity, Hero, HeroFactory, Platform, PlatformFactory, PlatformTypes, RunnerFactory} from '@/entities';
 
 class Game {
     private readonly hero: Hero;
@@ -11,17 +10,17 @@ class Game {
     private readonly world: Container;
     private readonly platforms: Platform[] = [];
 
-    private enemies: Runner[] = [];
+    private enemies: Entity[] = [];
 
     constructor(app: Application) {
         this.world = new Container();
         app.stage.addChild(this.world);
 
-        this.hero = new Hero(this.world, {x: 100, y: 0});
-
+        const heroFactory = new HeroFactory(this.world);
         const runnerFactory = new RunnerFactory(this.world);
         const platformFactory = new PlatformFactory(this.world);
 
+        this.hero = heroFactory.createHero({x: 100, y: 0});
         EnemiesData.forEach(params => this.enemies.push(runnerFactory.createRunner(params)));
         PlatformsData.forEach(params => this.platforms.push(platformFactory.createPlatform(params)));
 
@@ -53,7 +52,7 @@ class Game {
         return result;
     }
 
-    private checkPlatformCollision(character: Hero | Runner, prevPos: IPos, platform: Platform): void {
+    private checkPlatformCollision(character: Entity, prevPos: IPos, platform: Platform): void {
         const isSolid = platform.type === PlatformTypes.solid;
         if (character.isSkipCollision && !isSolid) return;
 

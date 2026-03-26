@@ -1,19 +1,18 @@
-import {type Container, type ContainerOptions} from 'pixi.js';
-import {Directions, type IDirections, type IPos, type IPosSize, type ITicker} from '@/types';
+import {Directions, type IDirections, type IPos, type ITicker} from '@/types';
 import {Bullet, BulletFactory} from '../Bullets';
+import {Entity} from '../Entity';
 import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
 import {HeroStates, type IHeroStates} from './types';
 
-class Hero {
-    public readonly view: HeroView;
+class Hero extends Entity<HeroView> {
     public readonly aim: HeroAim;
 
     private readonly controls: HeroControls;
     private readonly bulletFactory: BulletFactory;
     private readonly gravityForce: number = 0.4;
-    private readonly jumpForce: number = 8;
+    private readonly jumpForce: number = 9;
     private readonly speed: number = 6;
 
     private state: IHeroStates = HeroStates.stay;
@@ -22,32 +21,12 @@ class Hero {
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private bullets: Bullet[] = [];
 
-    constructor(world: Container, options?: ContainerOptions) {
-        this.view = new HeroView(options);
+    constructor(heroView: HeroView, bulletFactory: BulletFactory) {
+        super(heroView);
+
         this.aim = new HeroAim(this);
         this.controls = new HeroControls(this);
-        this.bulletFactory = new BulletFactory(world);
-        world.addChild(this.view);
-    }
-
-    public get x(): number {
-        return this.view.x;
-    }
-
-    public set x(value: number) {
-        this.view.x = value;
-    }
-
-    public get y(): number {
-        return this.view.y;
-    }
-
-    public set y(value: number) {
-        this.view.y = value;
-    }
-
-    public get bounds(): IPosSize {
-        return this.view.bounds;
+        this.bulletFactory = bulletFactory;
     }
 
     public get isInAir(): boolean {
