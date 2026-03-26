@@ -14,7 +14,6 @@ class Game {
 
     constructor(app: Application) {
         this.world = new Container();
-        app.stage.addChild(this.world);
 
         const heroFactory = new HeroFactory(this.world);
         const runnerFactory = new RunnerFactory(this.world);
@@ -26,6 +25,7 @@ class Game {
 
         this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
 
+        app.stage.addChild(this.world);
         app.ticker.add(this.update, this);
     }
 
