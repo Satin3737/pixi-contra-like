@@ -1,12 +1,12 @@
 import {Directions, type IDirections, type IPos, type ITicker} from '@/types';
 import {Bullet, BulletFactory} from '../Bullets';
-import {Entity} from '../Entity';
+import {Character} from '../Entity';
 import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
 import {HeroStates, type IHeroStates} from './types';
 
-class Hero extends Entity<HeroView> {
+class Hero extends Character<HeroView> {
     public readonly aim: HeroAim;
 
     private readonly controls: HeroControls;

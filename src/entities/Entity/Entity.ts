@@ -32,13 +32,9 @@ abstract class Entity<TEntityView extends EntityView = EntityView> {
         return this.view.destroyed;
     }
 
-    public abstract get isSkipCollision(): boolean;
-
     public destroy(): void {
         this.view.destroy();
     }
-
-    public abstract land(y: number, isSolid: boolean): void;
 
     public abstract update({deltaTime}: ITicker): void;
 }

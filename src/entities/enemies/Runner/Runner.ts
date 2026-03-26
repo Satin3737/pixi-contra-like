@@ -1,10 +1,10 @@
 import {Directions, type IDirections, type IPos, type ITicker} from '@/types';
 import {getRandomBoolean} from '@/utils';
-import {Entity} from '../../Entity';
+import {Character} from '../../Entity';
 import RunnerView from './RunnerView';
 import {type IRunnerStates, RunnerStates} from './types';
 
-class Runner extends Entity<RunnerView> {
+class Runner extends Character<RunnerView> {
     private readonly gravityForce: number = 0.4;
     private readonly jumpForce: number = 9;
     private readonly speed: number = 4;
