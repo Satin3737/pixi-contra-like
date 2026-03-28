@@ -1,5 +1,4 @@
-import type {Container} from 'pixi.js';
-import type {IPos} from '@/types';
+import type {Container, ContainerOptions} from 'pixi.js';
 import {BulletFactory} from '../Bullets';
 import Hero from './Hero';
 import HeroView from './HeroView';
@@ -11,8 +10,8 @@ class HeroFactory {
         this.world = world;
     }
 
-    public createHero(params: IPos): Hero {
-        const heroView = new HeroView(params);
+    public createHero(options?: ContainerOptions): Hero {
+        const heroView = new HeroView(options);
         const bulletFactory = new BulletFactory(this.world);
         const hero = new Hero(heroView, bulletFactory);
         this.world.addChild(heroView);

@@ -1,14 +1,14 @@
 import {Container, type ContainerOptions} from 'pixi.js';
 import {Directions, type IDirections, type IPosSize, type ISize} from '@/types';
 
-abstract class EntityView extends Container {
+class EntityView extends Container {
     protected readonly view = new Container();
 
-    private readonly bodySize: ISize;
+    private readonly size: ISize;
 
-    constructor(bodySize: ISize, options?: ContainerOptions) {
+    protected constructor(size: ISize, options?: ContainerOptions) {
         super(options);
-        this.bodySize = bodySize;
+        this.size = size;
 
         const halfWidth = this.bounds.width * 0.5;
         this.view.pivot.x = halfWidth;
@@ -20,8 +20,8 @@ abstract class EntityView extends Container {
         return {
             x: this.x,
             y: this.y,
-            width: this.bodySize.width,
-            height: this.bodySize.height
+            width: this.size.width,
+            height: this.size.height
         };
     }
 

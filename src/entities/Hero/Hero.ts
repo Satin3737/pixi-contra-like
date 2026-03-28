@@ -21,8 +21,8 @@ class Hero extends Character<HeroView> {
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private bullets: Bullet[] = [];
 
-    constructor(heroView: HeroView, bulletFactory: BulletFactory) {
-        super(heroView);
+    constructor(view: HeroView, bulletFactory: BulletFactory) {
+        super(view);
 
         this.aim = new HeroAim(this);
         this.controls = new HeroControls(this);
