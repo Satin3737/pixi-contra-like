@@ -1,8 +1,7 @@
 import type {Container} from 'pixi.js';
-import {BulletFactory} from '../Bullets';
-import type {IEntityCommonParams} from '../Entity';
 import Hero from './Hero';
 import HeroView from './HeroView';
+import type {ICreateHeroParams} from './types';
 
 class HeroFactory {
     private readonly world: Container;
@@ -11,10 +10,9 @@ class HeroFactory {
         this.world = world;
     }
 
-    public createHero(params: IEntityCommonParams): Hero {
+    public createHero({onShoot, ...params}: ICreateHeroParams): Hero {
         const view = new HeroView(params);
-        const bulletFactory = new BulletFactory(this.world);
-        const hero = new Hero({view, bulletFactory});
+        const hero = new Hero({view, onShoot});
         this.world.addChild(view);
         return hero;
     }

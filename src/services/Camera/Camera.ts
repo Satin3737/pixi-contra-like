@@ -33,6 +33,8 @@ class Camera {
     }
 
     public update(): void {
+        if (this.target.destroyed) return;
+
         if (
             this.target.x > this.centerScreenPosX &&
             this.target.x < this.rightBorderPosX &&

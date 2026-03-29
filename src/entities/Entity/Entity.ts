@@ -25,6 +25,10 @@ class Entity<TEntityView extends EntityView = EntityView> {
         this.view.y = value;
     }
 
+    public get uid(): number {
+        return this.view.uid;
+    }
+
     public get bounds(): IPosSize {
         return this.view.bounds;
     }

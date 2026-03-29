@@ -1,6 +1,5 @@
 import {Directions, type IDirections, type IPos, type ITicker} from '@/types';
-import {BulletTypes} from '@/entities/Bullets/types';
-import {Bullet, BulletFactory} from '../Bullets';
+import {BulletTypes, type IBulletTypes, type IOnShoot} from '../Bullets';
 import {Character} from '../Entity';
 import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
@@ -11,23 +10,23 @@ class Hero extends Character<HeroView> {
     public readonly aim: HeroAim;
 
     private readonly controls: HeroControls;
-    private readonly bulletFactory: BulletFactory;
     private readonly gravityForce: number = 0.4;
     private readonly jumpForce: number = 9;
     private readonly speed: number = 6;
+    private readonly onShoot: IOnShoot;
 
     private state: IHeroStates = HeroStates.stay;
     private velocity: IPos = {x: 0, y: 0};
     private movement: {x: IDirections; y: IDirections} = {x: Directions.stop, y: Directions.stop};
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
-    private bullets: Bullet[] = [];
+    private bulletType: IBulletTypes = BulletTypes.regular;
 
-    constructor({view, bulletFactory}: IHeroParams) {
+    constructor({view, onShoot}: IHeroParams) {
         super({view});
 
         this.aim = new HeroAim(this);
         this.controls = new HeroControls(this);
-        this.bulletFactory = bulletFactory;
+        this.onShoot = onShoot;
     }
 
     public get isInAir(): boolean {
@@ -36,10 +35,6 @@ class Hero extends Character<HeroView> {
 
     public get isSkipCollision(): boolean {
         return this.state === HeroStates.jump;
-    }
-
-    public get heroBullets(): Bullet[] {
-        return this.bullets;
     }
 
     public moveLeft(): void {
@@ -75,12 +70,7 @@ class Hero extends Character<HeroView> {
     }
 
     public shoot(): void {
-        this.bullets.push(
-            this.bulletFactory.createBullet({
-                type: BulletTypes.regular,
-                options: this.aim.getAim()
-            })
-        );
+        this.onShoot({type: this.bulletType, ownerId: this.uid, options: this.aim.getAim()});
     }
 
     public update({deltaTime}: ITicker): void {
@@ -95,9 +85,6 @@ class Hero extends Character<HeroView> {
         this.y += this.velocity.y;
 
         this.controls.update();
-
-        this.bullets.forEach(bullet => !bullet.destroyed && bullet.update({deltaTime}));
-        this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
     }
 }
 

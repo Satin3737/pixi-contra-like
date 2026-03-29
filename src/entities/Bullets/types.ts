@@ -1,5 +1,6 @@
 import type {ContainerOptions} from 'pixi.js';
 import type {ISize, IValueOf} from '@/types';
+import type BulletView from './BulletView';
 
 export const BulletTypes = {
     regular: 'regular'
@@ -13,7 +14,14 @@ export const BulletSizes: Record<IBulletTypes, ISize> = {
 
 export interface ICreateBulletParams {
     type: IBulletTypes;
+    ownerId: number;
     options?: ContainerOptions;
 }
 
-export type IBulletViewParams = ICreateBulletParams;
+export interface IBulletParams extends Pick<ICreateBulletParams, 'ownerId'> {
+    view: BulletView;
+}
+
+export type IBulletViewParams = Omit<ICreateBulletParams, 'ownerId'>;
+
+export type IOnShoot = (params: ICreateBulletParams) => void;

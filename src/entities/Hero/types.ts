@@ -1,10 +1,14 @@
 import type {IValueOf} from '@/types';
-import type {BulletFactory} from '../Bullets';
+import type {IOnShoot} from '../Bullets';
+import type {IEntityCommonParams} from '../Entity';
 import type HeroView from './HeroView';
 
-export interface IHeroParams {
+export interface ICreateHeroParams extends IEntityCommonParams {
+    onShoot: IOnShoot;
+}
+
+export interface IHeroParams extends Pick<ICreateHeroParams, 'onShoot'> {
     view: HeroView;
-    bulletFactory: BulletFactory;
 }
 
 export const HeroStates = {

@@ -1,9 +1,17 @@
 import type {ITicker} from '@/types';
 import {Entity} from '../Entity';
 import type BulletView from './BulletView';
+import type {IBulletParams} from './types';
 
 class Bullet extends Entity<BulletView> {
+    public readonly ownerId: number;
+
     private readonly speed: number = 24;
+
+    constructor({view, ownerId}: IBulletParams) {
+        super({view});
+        this.ownerId = ownerId;
+    }
 
     public update({deltaTime}: ITicker): void {
         this.x += this.speed * Math.cos(this.view.rotation) * deltaTime;

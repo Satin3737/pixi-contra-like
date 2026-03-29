@@ -10,9 +10,9 @@ class BulletFactory {
         this.world = world;
     }
 
-    public createBullet(params: ICreateBulletParams): Bullet {
-        const view = new BulletView(params);
-        const bullet = new Bullet({view});
+    public createBullet({type, ownerId, options}: ICreateBulletParams): Bullet {
+        const view = new BulletView({type, options});
+        const bullet = new Bullet({view, ownerId});
         this.world.addChild(view);
         return bullet;
     }
