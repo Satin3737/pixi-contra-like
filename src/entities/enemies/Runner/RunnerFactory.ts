@@ -1,16 +1,9 @@
-import type {Container} from 'pixi.js';
-import type {IEntityCommonParams} from '@/entities';
+import {EntityFactory, type IEntityCommonParams} from '../../Entity';
 import Runner from './Runner';
 import RunnerView from './RunnerView';
 
-class RunnerFactory {
-    private readonly world: Container;
-
-    constructor(world: Container) {
-        this.world = world;
-    }
-
-    public createRunner(params: IEntityCommonParams): Runner {
+class RunnerFactory extends EntityFactory {
+    public create(params: IEntityCommonParams): Runner {
         const view = new RunnerView(params);
         const runner = new Runner({view});
         this.world.addChild(view);

@@ -1,16 +1,10 @@
-import type {Container} from 'pixi.js';
+import {EntityFactory} from '../Entity';
 import Bullet from './Bullet';
 import BulletView from './BulletView';
 import type {ICreateBulletParams} from './types';
 
-class BulletFactory {
-    private readonly world: Container;
-
-    constructor(world: Container) {
-        this.world = world;
-    }
-
-    public createBullet({type, ownerId, options}: ICreateBulletParams): Bullet {
+class BulletFactory extends EntityFactory {
+    public create({type, ownerId, options}: ICreateBulletParams): Bullet {
         const view = new BulletView({type, options});
         const bullet = new Bullet({view, ownerId});
         this.world.addChild(view);
