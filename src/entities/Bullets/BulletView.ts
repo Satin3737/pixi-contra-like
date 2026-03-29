@@ -3,7 +3,7 @@ import {EntityView} from '../Entity';
 import {BulletSizes, BulletTypes, type IBulletTypes, type IBulletViewParams} from './types';
 
 class BulletView extends EntityView {
-    constructor({type, options}: IBulletViewParams) {
+    public constructor({type, options}: IBulletViewParams) {
         super({size: BulletSizes[type], options});
         this.drawBullet(type);
     }

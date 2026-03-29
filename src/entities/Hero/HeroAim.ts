@@ -5,7 +5,7 @@ class HeroAim {
     private readonly hero: Hero;
     private readonly aimContext: IAimContext;
 
-    constructor(hero: Hero) {
+    public constructor(hero: Hero) {
         this.hero = hero;
         this.aimContext = {x: this.hero.x, y: this.hero.y, rotation: 0};
     }

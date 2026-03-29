@@ -21,7 +21,7 @@ class Hero extends Character<HeroView> {
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private bulletType: IBulletTypes = BulletTypes.regular;
 
-    constructor({view, onShoot}: IHeroParams) {
+    public constructor({view, onShoot}: IHeroParams) {
         super({view});
 
         this.aim = new HeroAim(this);

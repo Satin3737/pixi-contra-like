@@ -8,7 +8,7 @@ class HeroView extends EntityView {
 
     private state: IHeroViewStates = HeroViewStates.stay;
 
-    constructor({options}: IEntityCommonParams) {
+    public constructor({options}: IEntityCommonParams) {
         super({size: {width: 20, height: 80}, options});
 
         this.states = {

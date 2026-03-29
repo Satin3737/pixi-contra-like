@@ -5,7 +5,7 @@ import type {IEntityParams} from './types';
 class Entity<TEntityView extends EntityView = EntityView> {
     public readonly view: TEntityView;
 
-    constructor({view}: IEntityParams<TEntityView>) {
+    public constructor({view}: IEntityParams<TEntityView>) {
         this.view = view;
     }
 

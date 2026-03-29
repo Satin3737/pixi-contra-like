@@ -3,7 +3,7 @@ import {EntityView} from '../Entity';
 import {type IPlatformTypes, type IPlatformViewParams, PlatformTypes} from './types';
 
 class PlatformView extends EntityView {
-    constructor({type, size, options}: IPlatformViewParams) {
+    public constructor({type, size, options}: IPlatformViewParams) {
         super({size, options});
         this.drawPlatform(type);
     }

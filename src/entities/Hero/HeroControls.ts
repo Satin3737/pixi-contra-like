@@ -7,7 +7,7 @@ class HeroControls {
     private readonly hero: Hero;
     private readonly keyboard: Keyboard = Keyboard.instance;
 
-    constructor(hero: Hero) {
+    public constructor(hero: Hero) {
         this.hero = hero;
         this.initControls();
     }

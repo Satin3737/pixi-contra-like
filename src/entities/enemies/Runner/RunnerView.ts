@@ -8,7 +8,7 @@ class RunnerView extends EntityView {
 
     private state: IRunnerViewStates = RunnerViewStates.run;
 
-    constructor({options}: IEntityCommonParams) {
+    public constructor({options}: IEntityCommonParams) {
         super({size: {width: 20, height: 80}, options});
 
         this.states = {
