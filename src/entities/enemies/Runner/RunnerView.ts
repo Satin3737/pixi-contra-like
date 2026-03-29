@@ -1,5 +1,5 @@
-import {type ContainerOptions, Graphics} from 'pixi.js';
-import {EntityView} from '../../Entity';
+import {Graphics} from 'pixi.js';
+import {EntityView, type IEntityCommonParams} from '../../Entity';
 import {type IRunnerViewStates, RunnerViewStates} from './types';
 
 class RunnerView extends EntityView {
@@ -8,8 +8,8 @@ class RunnerView extends EntityView {
 
     private state: IRunnerViewStates = RunnerViewStates.run;
 
-    constructor(options?: ContainerOptions) {
-        super({width: 20, height: 80}, options);
+    constructor({options}: IEntityCommonParams) {
+        super({size: {width: 20, height: 80}, options});
 
         this.states = {
             [RunnerViewStates.run]: this.drawRunView(),

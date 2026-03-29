@@ -1,6 +1,7 @@
 import type {Container} from 'pixi.js';
 import Platform from './Platform';
-import type {IPlatform} from './types';
+import PlatformView from './PlatformView';
+import type {ICreatePlatformParams} from './types';
 
 class PlatformFactory {
     private readonly world: Container;
@@ -9,9 +10,10 @@ class PlatformFactory {
         this.world = world;
     }
 
-    public createPlatform(params: IPlatform): Platform {
-        const platform = new Platform(params);
-        this.world.addChild(platform);
+    public createPlatform(params: ICreatePlatformParams): Platform {
+        const view = new PlatformView(params);
+        const platform = new Platform({...params, view});
+        this.world.addChild(view);
         return platform;
     }
 }

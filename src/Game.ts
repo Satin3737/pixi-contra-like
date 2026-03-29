@@ -1,6 +1,6 @@
 import {type Application, Container} from 'pixi.js';
 import type {ICollision, IPos, IPosSize, ITicker} from '@/types';
-import {EnemiesData, PlatformsData} from '@/data';
+import {PlatformsData, RunnerData} from '@/data';
 import {Camera} from '@/services';
 import {Character, Hero, HeroFactory, Platform, PlatformFactory, PlatformTypes, RunnerFactory} from '@/entities';
 
@@ -19,8 +19,8 @@ class Game {
         const runnerFactory = new RunnerFactory(this.world);
         const platformFactory = new PlatformFactory(this.world);
 
-        this.hero = heroFactory.createHero({x: 100, y: 0});
-        EnemiesData.forEach(params => this.enemies.push(runnerFactory.createRunner(params)));
+        this.hero = heroFactory.createHero({options: {x: 100, y: 0}});
+        RunnerData.forEach(options => this.enemies.push(runnerFactory.createRunner({options})));
         PlatformsData.forEach(params => this.platforms.push(platformFactory.createPlatform(params)));
 
         this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
@@ -56,7 +56,7 @@ class Game {
         const isSolid = platform.type === PlatformTypes.solid;
         if (character.isSkipCollision && !isSolid) return;
 
-        const collision = this.getPlatformCollision(character.bounds, platform, prevPos);
+        const collision = this.getPlatformCollision(character.bounds, platform.bounds, prevPos);
         collision.vertical && character.land(platform.y, isSolid);
 
         if (collision.horizontal) {

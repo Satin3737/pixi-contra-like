@@ -1,6 +1,6 @@
-import {type IPlatform, PlatformTypes} from '@/entities';
+import {type ICreatePlatformParams, PlatformTypes} from '@/entities';
 
-export const PlatformsData: IPlatform[] = [
+export const PlatformsData: ICreatePlatformParams[] = [
     {type: PlatformTypes.normal, size: {width: 200, height: 30}, options: {x: 100, y: 400}},
     {type: PlatformTypes.normal, size: {width: 200, height: 30}, options: {x: 300, y: 400}},
     {type: PlatformTypes.normal, size: {width: 200, height: 30}, options: {x: 500, y: 400}},

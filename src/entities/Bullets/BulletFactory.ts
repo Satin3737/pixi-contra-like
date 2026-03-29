@@ -1,6 +1,7 @@
-import type {Container, ContainerOptions} from 'pixi.js';
+import type {Container} from 'pixi.js';
 import Bullet from './Bullet';
 import BulletView from './BulletView';
+import type {ICreateBulletParams} from './types';
 
 class BulletFactory {
     private readonly world: Container;
@@ -9,10 +10,10 @@ class BulletFactory {
         this.world = world;
     }
 
-    public createBullet(options?: ContainerOptions): Bullet {
-        const bulletView = new BulletView(options);
-        const bullet = new Bullet(bulletView);
-        this.world.addChild(bulletView);
+    public createBullet(params: ICreateBulletParams): Bullet {
+        const view = new BulletView(params);
+        const bullet = new Bullet({view});
+        this.world.addChild(view);
         return bullet;
     }
 }

@@ -1,10 +1,11 @@
 import {Directions, type IDirections, type IPos, type ITicker} from '@/types';
+import {BulletTypes} from '@/entities/Bullets/types';
 import {Bullet, BulletFactory} from '../Bullets';
 import {Character} from '../Entity';
 import HeroAim from './HeroAim';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
-import {HeroStates, type IHeroStates} from './types';
+import {HeroStates, type IHeroParams, type IHeroStates} from './types';
 
 class Hero extends Character<HeroView> {
     public readonly aim: HeroAim;
@@ -21,8 +22,8 @@ class Hero extends Character<HeroView> {
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private bullets: Bullet[] = [];
 
-    constructor(view: HeroView, bulletFactory: BulletFactory) {
-        super(view);
+    constructor({view, bulletFactory}: IHeroParams) {
+        super({view});
 
         this.aim = new HeroAim(this);
         this.controls = new HeroControls(this);
@@ -74,7 +75,12 @@ class Hero extends Character<HeroView> {
     }
 
     public shoot(): void {
-        this.bullets.push(this.bulletFactory.createBullet(this.aim.getAim()));
+        this.bullets.push(
+            this.bulletFactory.createBullet({
+                type: BulletTypes.regular,
+                options: this.aim.getAim()
+            })
+        );
     }
 
     public update({deltaTime}: ITicker): void {

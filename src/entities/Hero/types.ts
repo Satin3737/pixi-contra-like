@@ -1,4 +1,11 @@
 import type {IValueOf} from '@/types';
+import type {BulletFactory} from '../Bullets';
+import type HeroView from './HeroView';
+
+export interface IHeroParams {
+    view: HeroView;
+    bulletFactory: BulletFactory;
+}
 
 export const HeroStates = {
     stay: 'stay',

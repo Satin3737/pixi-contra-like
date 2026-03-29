@@ -1,4 +1,5 @@
-import type {Container, ContainerOptions} from 'pixi.js';
+import type {Container} from 'pixi.js';
+import type {IEntityCommonParams} from '@/entities';
 import Runner from './Runner';
 import RunnerView from './RunnerView';
 
@@ -9,10 +10,10 @@ class RunnerFactory {
         this.world = world;
     }
 
-    public createRunner(options?: ContainerOptions): Runner {
-        const runnerView = new RunnerView(options);
-        const runner = new Runner(runnerView);
-        this.world.addChild(runnerView);
+    public createRunner(params: IEntityCommonParams): Runner {
+        const view = new RunnerView(params);
+        const runner = new Runner({view});
+        this.world.addChild(view);
         return runner;
     }
 }

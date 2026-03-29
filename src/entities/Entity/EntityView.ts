@@ -1,12 +1,13 @@
-import {Container, type ContainerOptions} from 'pixi.js';
+import {Container} from 'pixi.js';
 import {Directions, type IDirections, type IPosSize, type ISize} from '@/types';
+import type {IEntityViewParams} from './types';
 
 class EntityView extends Container {
     protected readonly view = new Container();
 
     private readonly size: ISize;
 
-    protected constructor(size: ISize, options?: ContainerOptions) {
+    protected constructor({size, options}: IEntityViewParams) {
         super(options);
         this.size = size;
 

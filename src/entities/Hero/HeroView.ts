@@ -1,5 +1,5 @@
-import {type ContainerOptions, Graphics} from 'pixi.js';
-import {EntityView} from '../Entity';
+import {Graphics} from 'pixi.js';
+import {EntityView, type IEntityCommonParams} from '../Entity';
 import {HeroViewStates, type IHeroViewStates} from './types';
 
 class HeroView extends EntityView {
@@ -8,8 +8,8 @@ class HeroView extends EntityView {
 
     private state: IHeroViewStates = HeroViewStates.stay;
 
-    constructor(options?: ContainerOptions) {
-        super({width: 20, height: 80}, options);
+    constructor({options}: IEntityCommonParams) {
+        super({size: {width: 20, height: 80}, options});
 
         this.states = {
             [HeroViewStates.stay]: this.drawStayView(),

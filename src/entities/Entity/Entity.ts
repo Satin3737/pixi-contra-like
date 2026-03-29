@@ -1,10 +1,11 @@
-import type {IPosSize, ITicker} from '@/types';
+import type {IPosSize} from '@/types';
 import type EntityView from './EntityView';
+import type {IEntityParams} from './types';
 
-abstract class Entity<TEntityView extends EntityView = EntityView> {
+class Entity<TEntityView extends EntityView = EntityView> {
     public readonly view: TEntityView;
 
-    constructor(view: TEntityView) {
+    constructor({view}: IEntityParams<TEntityView>) {
         this.view = view;
     }
 
@@ -35,8 +36,6 @@ abstract class Entity<TEntityView extends EntityView = EntityView> {
     public destroy(): void {
         this.view.destroy();
     }
-
-    public abstract update({deltaTime}: ITicker): void;
 }
 
 export default Entity;
