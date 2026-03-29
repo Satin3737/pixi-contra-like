@@ -7,6 +7,8 @@ export interface IEntityCommonParams {
 
 export interface IEntityParams<TEntityView> {
     view: TEntityView;
+    health?: number;
+    damage?: number;
 }
 
 export interface IEntityViewParams extends IEntityCommonParams {

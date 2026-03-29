@@ -5,8 +5,13 @@ import type {IEntityParams} from './types';
 class Entity<TEntityView extends EntityView = EntityView> {
     public readonly view: TEntityView;
 
-    public constructor({view}: IEntityParams<TEntityView>) {
+    private _health: number = 1;
+    private _damage: number = 1;
+
+    public constructor({view, health, damage}: IEntityParams<TEntityView>) {
         this.view = view;
+        if (health !== undefined) this._health = health;
+        if (damage !== undefined) this._damage = damage;
     }
 
     public get x(): number {
@@ -25,6 +30,14 @@ class Entity<TEntityView extends EntityView = EntityView> {
         this.view.y = value;
     }
 
+    public get health(): number {
+        return this._health;
+    }
+
+    public get damage(): number {
+        return this._damage;
+    }
+
     public get uid(): number {
         return this.view.uid;
     }
@@ -35,6 +48,11 @@ class Entity<TEntityView extends EntityView = EntityView> {
 
     public get destroyed(): boolean {
         return this.view.destroyed;
+    }
+
+    public takeDamage(amount: number): void {
+        this._health -= amount;
+        if (this._health <= 0) this.destroy();
     }
 
     public destroy(): void {

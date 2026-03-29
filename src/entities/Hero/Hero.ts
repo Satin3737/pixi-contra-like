@@ -70,7 +70,12 @@ class Hero extends Character<HeroView> {
     }
 
     public shoot(): void {
-        this.onShoot({type: this.bulletType, ownerId: this.uid, options: this.aim.getAim()});
+        this.onShoot({
+            type: this.bulletType,
+            ownerId: this.uid,
+            damage: this.damage,
+            options: this.aim.getAim()
+        });
     }
 
     public update({deltaTime}: ITicker): void {

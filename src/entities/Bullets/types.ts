@@ -15,13 +15,14 @@ export const BulletSizes: Record<IBulletTypes, ISize> = {
 export interface ICreateBulletParams {
     type: IBulletTypes;
     ownerId: number;
+    damage: number;
     options?: ContainerOptions;
 }
 
-export interface IBulletParams extends Pick<ICreateBulletParams, 'ownerId'> {
+export interface IBulletParams extends Pick<ICreateBulletParams, 'ownerId' | 'damage'> {
     view: BulletView;
 }
 
-export type IBulletViewParams = Omit<ICreateBulletParams, 'ownerId'>;
+export type IBulletViewParams = Omit<ICreateBulletParams, 'ownerId' | 'damage'>;
 
 export type IOnShoot = (params: ICreateBulletParams) => void;

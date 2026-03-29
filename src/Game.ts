@@ -1,6 +1,6 @@
 import {type Application, Container} from 'pixi.js';
 import type {ICollision, IPos, IPosSize, ITicker} from '@/types';
-import {PlatformsData, RunnerData} from '@/data';
+import {PlatformsData, RunnersData, TurretsData} from '@/data';
 import {Camera, Physics} from '@/services';
 import {
     Bullet,
@@ -13,7 +13,9 @@ import {
     PlatformFactory,
     PlatformTypes,
     Runner,
-    RunnerFactory
+    RunnerFactory,
+    Turret,
+    TurretFactory
 } from '@/entities';
 
 class Game {
@@ -25,6 +27,7 @@ class Game {
 
     private bullets: Bullet[] = [];
     private characters: Character[] = [];
+    private turrets: Turret[] = [];
 
     constructor(app: Application) {
         this.world = new Container();
@@ -32,13 +35,20 @@ class Game {
         const heroFactory = new HeroFactory(this.world);
         const runnerFactory = new RunnerFactory(this.world);
         const platformFactory = new PlatformFactory(this.world);
+        const turretFactory = new TurretFactory(this.world);
         this.bulletFactory = new BulletFactory(this.world);
 
-        this.hero = heroFactory.createHero({onShoot: this.onShoot, options: {x: 100, y: 0}});
+        this.hero = heroFactory.create({onShoot: this.onShoot, options: {x: 100, y: 0}});
         this.characters.push(this.hero);
 
-        RunnerData.forEach(options => this.characters.push(runnerFactory.createRunner({options})));
-        PlatformsData.forEach(params => this.platforms.push(platformFactory.createPlatform(params)));
+        TurretsData.forEach(({health, options}) => {
+            this.turrets.push(
+                turretFactory.create({getTarget: this.getHeroAsTarget, onShoot: this.onShoot, health, options})
+            );
+        });
+
+        RunnersData.forEach(({options}) => this.characters.push(runnerFactory.create({options})));
+        PlatformsData.forEach(params => this.platforms.push(platformFactory.create(params)));
 
         this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
 
@@ -70,7 +80,12 @@ class Game {
     }
 
     private onShoot = (params: ICreateBulletParams): void => {
-        this.bullets.push(this.bulletFactory.createBullet(params));
+        this.bullets.push(this.bulletFactory.create(params));
+    };
+
+    private getHeroAsTarget = (): IPos | undefined => {
+        if (this.hero.destroyed) return;
+        return this.hero.bounds;
     };
 
     private update({deltaTime}: ITicker): void {
@@ -89,7 +104,7 @@ class Game {
                 !this.hero.destroyed &&
                 Physics.isAABBCollision(character.bounds, this.hero.bounds)
             ) {
-                this.hero.destroy();
+                this.hero.takeDamage(character.damage);
                 character.destroy();
                 return;
             }
@@ -99,7 +114,7 @@ class Game {
 
                 if (Physics.isAABBCollision(bullet.bounds, character.bounds)) {
                     bullet.destroy();
-                    character.destroy();
+                    character.takeDamage(bullet.damage);
                     return;
                 }
             }
@@ -110,6 +125,8 @@ class Game {
 
         this.characters = this.characters.filter(enemy => !enemy.destroyed);
 
+        this.turrets = this.turrets.filter(turret => !turret.destroyed);
+
         this.bullets.forEach(bullet => {
             if (bullet.destroyed) return;
             Physics.isOutOfBounds(bullet, this.camera.visibleAreaBounds) && bullet.destroy();
@@ -117,6 +134,19 @@ class Game {
         });
 
         this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
+
+        this.turrets.forEach(turret => {
+            for (const bullet of this.bullets) {
+                if (bullet.destroyed || bullet.ownerId === turret.uid) continue;
+                if (Physics.isAABBCollision(bullet.bounds, turret.bounds)) {
+                    turret.takeDamage(bullet.damage);
+                    bullet.destroy();
+                    break;
+                }
+            }
+
+            !turret.destroyed && turret.update({deltaTime});
+        });
 
         for (const platform of this.platforms) {
             this.characters.forEach((character, i) =>
