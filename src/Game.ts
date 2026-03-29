@@ -12,6 +12,7 @@ import {
     Platform,
     PlatformFactory,
     PlatformTypes,
+    Runner,
     RunnerFactory
 } from '@/entities';
 
@@ -79,6 +80,16 @@ class Game {
             if (character.destroyed) return;
 
             if (Physics.isOutOfBounds(character, this.camera.visibleAreaBounds)) {
+                character.destroy();
+                return;
+            }
+
+            if (
+                character instanceof Runner &&
+                !this.hero.destroyed &&
+                Physics.isAABBCollision(character.bounds, this.hero.bounds)
+            ) {
+                this.hero.destroy();
                 character.destroy();
                 return;
             }
