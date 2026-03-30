@@ -35,7 +35,7 @@ class Runner extends Character<RunnerView> {
         this.isStayOnSolid = isSolid;
     }
 
-    public update({deltaTime}: ITicker): void {
+    public override update({deltaTime}: ITicker): void {
         this.velocity.x = this.movement.x * this.speed * deltaTime;
         this.x += this.velocity.x;
 

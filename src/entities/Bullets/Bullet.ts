@@ -13,7 +13,7 @@ class Bullet extends Entity<BulletView> {
         this.ownerId = ownerId;
     }
 
-    public update({deltaTime}: ITicker): void {
+    public override update({deltaTime}: ITicker): void {
         this.x += this.speed * Math.cos(this.view.rotation) * deltaTime;
         this.y += this.speed * Math.sin(this.view.rotation) * deltaTime;
     }

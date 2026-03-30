@@ -18,11 +18,14 @@ class Turret extends Entity<TurretView> {
         this.getTarget = getTarget;
     }
 
-    public update({deltaTime}: ITicker): void {
+    public override update({deltaTime}: ITicker): void {
         const target = this.getTarget();
         if (!target) return;
 
-        const targetAngle = Math.atan2(target.y - this.y, target.x - this.x);
+        const centerX = this.x + this.bounds.width / 2;
+        const centerY = this.y + this.bounds.height / 2;
+
+        const targetAngle = Math.atan2(target.y - centerY, target.x - centerX);
         const diff = targetAngle - this.view.barrelRotation;
         const normalized = Math.atan2(Math.sin(diff), Math.cos(diff));
         this.view.barrelRotation += normalized * this.rotationSpeed * deltaTime;
