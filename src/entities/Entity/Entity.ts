@@ -1,9 +1,10 @@
-import type {IPosSize} from '@/types';
+import type {IPosSize, ITicker} from '@/types';
 import type EntityView from './EntityView';
-import type {IEntityParams} from './types';
+import {EntityCategories, type IEntityCategories, type IEntityParams} from './types';
 
 class Entity<TEntityView extends EntityView = EntityView> {
     public readonly view: TEntityView;
+    public readonly category: IEntityCategories = EntityCategories.entity;
 
     private _health: number = 1;
     private _damage: number = 1;
@@ -54,6 +55,8 @@ class Entity<TEntityView extends EntityView = EntityView> {
         this._health -= amount;
         if (this._health <= 0) this.destroy();
     }
+
+    public update(_: ITicker): void {}
 
     public destroy(): void {
         this.view.destroy();
