@@ -1,4 +1,4 @@
-import type {IPosSize, ITicker} from '@/types';
+import type {IPos, IPosSize, ITicker} from '@/types';
 import type EntityView from './EntityView';
 import {EntityCategories, type IEntityCategories, type IEntityParams} from './types';
 
@@ -29,6 +29,12 @@ class Entity<TEntityView extends EntityView = EntityView> {
 
     public set y(value: number) {
         this.view.y = value;
+    }
+
+    public get centerPoint(): IPos | undefined {
+        if (this.destroyed) return;
+        const {x, y, width, height} = this.bounds;
+        return {x: x + width * 0.5, y: y + height * 0.5};
     }
 
     public get health(): number {

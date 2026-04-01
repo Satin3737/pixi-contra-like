@@ -22,10 +22,10 @@ class Turret extends Entity<TurretView> {
         const target = this.getTarget();
         if (!target) return;
 
-        const centerX = this.x + this.bounds.width / 2;
-        const centerY = this.y + this.bounds.height / 2;
+        const center = this.centerPoint;
+        if (!center) return;
 
-        const targetAngle = Math.atan2(target.y - centerY, target.x - centerX);
+        const targetAngle = Math.atan2(target.y - center.y, target.x - center.x);
         const diff = targetAngle - this.view.barrelRotation;
         const normalized = Math.atan2(Math.sin(diff), Math.cos(diff));
         this.view.barrelRotation += normalized * this.rotationSpeed * deltaTime;
