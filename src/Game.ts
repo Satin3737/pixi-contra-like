@@ -45,7 +45,7 @@ class Game {
         TurretsData.forEach(({health, options}) => {
             this.entities.push(
                 turretFactory.create({
-                    getTarget: this.getHeroAsTarget,
+                    getTarget: () => this.hero.centerPoint,
                     onShoot: this.onShoot,
                     health,
                     options
@@ -77,12 +77,6 @@ class Game {
 
     private onShoot = (params: ICreateBulletParams): void => {
         this.bullets.push(this.bulletFactory.create(params));
-    };
-
-    private getHeroAsTarget = (): IPos | undefined => {
-        if (this.hero.destroyed) return;
-        const {x, y, width, height} = this.hero.bounds;
-        return {x: x + width / 2, y: y + height / 2};
     };
 
     private checkBulletCollisions(): void {

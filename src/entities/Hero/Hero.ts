@@ -37,6 +37,12 @@ class Hero extends Character<HeroView> {
         return this.state === HeroStates.jump;
     }
 
+    public get centerPoint(): IPos | undefined {
+        if (this.destroyed) return;
+        const {x, y, width, height} = this.bounds;
+        return {x: x + width * 0.5, y: y + height * 0.5};
+    }
+
     public moveLeft(): void {
         this.movementContext.left = Directions.left;
         this.movement.x = this.movementContext.right ? Directions.stop : this.movementContext.left;
