@@ -10,6 +10,8 @@ export const Directions = {
 
 export type IDirections = IValueOf<typeof Directions>;
 
+export type IMovement = {x: IDirections; y: IDirections};
+
 export interface IPos {
     x: number;
     y: number;

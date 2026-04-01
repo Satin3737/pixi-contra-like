@@ -1,4 +1,4 @@
-import {Directions, type IDirections, type IPos, type ITicker} from '@/types';
+import {Directions, type IDirections, type ITicker} from '@/types';
 import {BulletTypes, type IBulletTypes, type IOnShoot} from '../Bullets';
 import {Character} from '../Entity';
 import HeroAim from './HeroAim';
@@ -9,15 +9,12 @@ import {HeroStates, type IHeroParams, type IHeroStates} from './types';
 class Hero extends Character<HeroView> {
     public readonly aim: HeroAim;
 
+    protected override readonly speed: number = 6;
+
     private readonly controls: HeroControls;
-    private readonly gravityForce: number = 0.4;
-    private readonly jumpForce: number = 9;
-    private readonly speed: number = 6;
     private readonly onShoot: IOnShoot;
 
     private state: IHeroStates = HeroStates.stay;
-    private velocity: IPos = {x: 0, y: 0};
-    private movement: {x: IDirections; y: IDirections} = {x: Directions.stop, y: Directions.stop};
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
     private bulletType: IBulletTypes = BulletTypes.regular;
 

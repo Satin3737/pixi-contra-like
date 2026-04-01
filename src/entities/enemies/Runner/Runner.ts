@@ -1,17 +1,13 @@
-import {Directions, type IDirections, type IPos, type ITicker} from '@/types';
+import {Directions, type IMovement, type ITicker} from '@/types';
 import {getRandomBoolean} from '@/utils';
 import {Character} from '../../Entity';
 import RunnerView from './RunnerView';
 import {type IRunnerStates, RunnerStates} from './types';
 
 class Runner extends Character<RunnerView> {
-    private readonly gravityForce: number = 0.4;
-    private readonly jumpForce: number = 9;
-    private readonly speed: number = 4;
+    protected override movement: IMovement = {x: Directions.left, y: Directions.stop};
 
     private state: IRunnerStates = RunnerStates.run;
-    private velocity: IPos = {x: 0, y: 0};
-    private movement: {x: IDirections; y: IDirections} = {x: Directions.left, y: Directions.stop};
     private isStayOnSolid: boolean = false;
 
     public get isInAir(): boolean {
