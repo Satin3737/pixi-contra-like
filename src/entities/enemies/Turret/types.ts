@@ -1,5 +1,5 @@
 import type {IPos} from '@/types';
-import type {IOnShoot} from '../../Bullets';
+import type {IOnShoot} from '../../Weapon';
 import type {IEntityCommonParams} from '../../Entity';
 import type TurretView from './TurretView';
 

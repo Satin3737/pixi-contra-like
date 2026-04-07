@@ -10,7 +10,7 @@ import {
     EntityCategories,
     Hero,
     HeroFactory,
-    type ICreateBulletParams,
+    type IShootParams,
     Platform,
     PlatformFactory,
     PlatformTypes,
@@ -53,7 +53,15 @@ class Game {
             );
         });
 
-        RunnersData.forEach(({options}) => this.entities.push(runnerFactory.create({options})));
+        RunnersData.forEach(({options}) => {
+            this.entities.push(
+                runnerFactory.create({
+                    onShoot: this.onShoot,
+                    options
+                })
+            );
+        });
+
         PlatformsData.forEach(params => this.platforms.push(platformFactory.create(params)));
 
         this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
@@ -75,8 +83,8 @@ class Game {
         }
     }
 
-    private onShoot = (params: ICreateBulletParams): void => {
-        this.bullets.push(this.bulletFactory.create(params));
+    private onShoot = ({aimContext, ...rest}: IShootParams): void => {
+        this.bullets.push(this.bulletFactory.create({...rest, options: aimContext}));
     };
 
     private checkBulletCollisions(): void {
@@ -105,7 +113,7 @@ class Game {
             }
 
             if (!this.hero.destroyed && Physics.isAABBCollision(entity.bounds, this.hero.bounds)) {
-                this.hero.takeDamage(entity.damage);
+                this.hero.takeDamage(entity.weapon.damage);
                 entity.destroy();
             }
         });

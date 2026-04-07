@@ -5,12 +5,14 @@ import type {IBulletParams} from './types';
 
 class Bullet extends Entity<BulletView> {
     public readonly ownerId: number;
+    public readonly damage: number;
 
     private readonly speed: number = 24;
 
     public constructor({view, ownerId, damage}: IBulletParams) {
-        super({view, damage});
+        super({view});
         this.ownerId = ownerId;
+        this.damage = damage;
     }
 
     public override update({deltaTime}: ITicker): void {

@@ -24,5 +24,3 @@ export interface IBulletParams extends Pick<ICreateBulletParams, 'ownerId' | 'da
 }
 
 export type IBulletViewParams = Omit<ICreateBulletParams, 'ownerId' | 'damage'>;
-
-export type IOnShoot = (params: ICreateBulletParams) => void;

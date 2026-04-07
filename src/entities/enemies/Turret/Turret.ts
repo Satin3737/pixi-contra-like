@@ -1,11 +1,11 @@
 import {type ITicker} from '@/types';
-import {BulletTypes, type IOnShoot} from '../../Bullets';
 import {Entity} from '../../Entity';
+import {Weapon} from '../../Weapon';
 import TurretView from './TurretView';
 import type {IGetTarget, ITurretParams} from './types';
 
 class Turret extends Entity<TurretView> {
-    private readonly onShoot: IOnShoot;
+    private readonly weapon: Weapon;
     private readonly getTarget: IGetTarget;
     private readonly rotationSpeed: number = 0.02;
     private readonly shootCooldown: number = 120;
@@ -14,8 +14,8 @@ class Turret extends Entity<TurretView> {
 
     public constructor({view, health, getTarget, onShoot}: ITurretParams) {
         super({view, health});
-        this.onShoot = onShoot;
         this.getTarget = getTarget;
+        this.weapon = new Weapon({ownerId: this.uid, onShoot});
     }
 
     public override update({deltaTime}: ITicker): void {
@@ -39,16 +39,8 @@ class Turret extends Entity<TurretView> {
     }
 
     private shoot(): void {
-        this.onShoot({
-            type: BulletTypes.regular,
-            ownerId: this.uid,
-            damage: this.damage,
-            options: {
-                y: this.y + this.bounds.width / 2,
-                x: this.x + this.bounds.height / 2,
-                rotation: this.view.barrelRotation
-            }
-        });
+        const center = this.centerPoint ?? this;
+        this.weapon.fire({x: center.x, y: center.y, rotation: this.view.barrelRotation});
     }
 }
 

@@ -1,6 +1,6 @@
 import type {IValueOf} from '@/types';
-import type {IOnShoot} from '../Bullets';
 import type {IEntityCommonParams} from '../Entity';
+import type {IAimContext, IOnShoot} from '../Weapon';
 import type HeroView from './HeroView';
 
 export interface ICreateHeroParams extends IEntityCommonParams {
@@ -33,13 +33,7 @@ export const HeroViewStates = {
 
 export type IHeroViewStates = IValueOf<typeof HeroViewStates>;
 
-export interface IAimContext {
-    x: number;
-    y: number;
-    rotation: number;
-}
-
-export const AimConfigs: Record<IHeroViewStates, IAimContext> = {
+export const HeroAimConfigs: Record<IHeroViewStates, IAimContext> = {
     [HeroViewStates.stay]: {x: 60, y: 35, rotation: 0},
     [HeroViewStates.stayUp]: {x: 10, y: -20, rotation: -Math.PI / 2},
     [HeroViewStates.stayDown]: {x: 10, y: 90, rotation: Math.PI / 2},

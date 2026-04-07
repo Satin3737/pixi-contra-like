@@ -7,12 +7,10 @@ class Entity<TEntityView extends EntityView = EntityView> {
     public readonly category: IEntityCategories = EntityCategories.entity;
 
     private _health: number = 1;
-    private _damage: number = 1;
 
-    public constructor({view, health, damage}: IEntityParams<TEntityView>) {
+    public constructor({view, health}: IEntityParams<TEntityView>) {
         this.view = view;
         if (health !== undefined) this._health = health;
-        if (damage !== undefined) this._damage = damage;
     }
 
     public get x(): number {
@@ -39,10 +37,6 @@ class Entity<TEntityView extends EntityView = EntityView> {
 
     public get health(): number {
         return this._health;
-    }
-
-    public get damage(): number {
-        return this._damage;
     }
 
     public get uid(): number {

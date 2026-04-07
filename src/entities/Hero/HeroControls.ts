@@ -1,7 +1,7 @@
 import {Directions, type IDirections} from '@/types';
 import {KeyEvents, Keyboard, Keys} from '@/services';
 import type Hero from './Hero';
-import {AimConfigs, HeroViewStates, type IHeroViewStates} from './types';
+import {HeroViewStates, type IHeroViewStates} from './types';
 
 class HeroControls {
     private readonly hero: Hero;
@@ -18,19 +18,9 @@ class HeroControls {
 
     public update(): void {
         const state = this.currentViewState;
-        const config = AimConfigs[state];
         const direction = this.currentViewDirection;
-
         this.hero.view.show(state);
         if (direction) this.hero.view.flip(direction);
-
-        const facingLeft = this.hero.view.direction === Directions.left;
-
-        this.hero.aim.setAim({
-            x: this.hero.x + (facingLeft ? this.hero.bounds.width - config.x : config.x),
-            y: this.hero.y + config.y,
-            rotation: facingLeft ? Math.PI - config.rotation : config.rotation
-        });
     }
 
     private get isUp(): boolean {

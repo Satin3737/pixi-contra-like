@@ -6,7 +6,7 @@ class HeroView extends EntityView {
     private readonly stroke: {width: number; color: number} = {width: 2, color: 0x0000ff};
     private readonly states: Record<IHeroViewStates, Graphics>;
 
-    private state: IHeroViewStates = HeroViewStates.stay;
+    private _state: IHeroViewStates = HeroViewStates.stay;
 
     public constructor({options}: IEntityCommonParams) {
         super({size: {width: 20, height: 80}, options});
@@ -23,16 +23,20 @@ class HeroView extends EntityView {
         };
 
         Object.entries(this.states).forEach(([state, view]) => {
-            view.visible = this.state === state;
+            view.visible = this._state === state;
             this.view.addChild(view);
         });
     }
 
+    public get state(): IHeroViewStates {
+        return this._state;
+    }
+
     public show(state: IHeroViewStates): void {
-        if (this.state === state) return;
+        if (this._state === state) return;
         Object.values(this.states).forEach(view => (view.visible = false));
         this.states[state].visible = true;
-        this.state = state;
+        this._state = state;
     }
 
     private drawStayView(): Graphics {

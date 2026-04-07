@@ -1,14 +1,23 @@
 import {Directions, type IMovement, type ITicker} from '@/types';
 import {getRandomBoolean} from '@/utils';
 import {Character} from '../../Entity';
+import {Weapon, WeaponTypes} from '../../Weapon';
 import RunnerView from './RunnerView';
-import {type IRunnerStates, RunnerStates} from './types';
+import {type IRunnerParams, type IRunnerStates, RunnerStates} from './types';
 
 class Runner extends Character<RunnerView> {
+    public readonly weapon: Weapon;
+
     protected override movement: IMovement = {x: Directions.left, y: Directions.stop};
 
     private state: IRunnerStates = RunnerStates.run;
     private isStayOnSolid: boolean = false;
+
+    public constructor({view, onShoot}: IRunnerParams) {
+        super({view});
+
+        this.weapon = new Weapon({type: WeaponTypes.melee, ownerId: this.uid, onShoot});
+    }
 
     public get isInAir(): boolean {
         return this.state === RunnerStates.jump || this.state === RunnerStates.fall;

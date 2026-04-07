@@ -1,29 +1,25 @@
 import {Directions, type IDirections, type ITicker} from '@/types';
-import {BulletTypes, type IBulletTypes, type IOnShoot} from '../Bullets';
 import {Character} from '../Entity';
-import HeroAim from './HeroAim';
+import {Weapon} from '../Weapon';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
-import {HeroStates, type IHeroParams, type IHeroStates} from './types';
+import {HeroAimConfigs, HeroStates, type IHeroParams, type IHeroStates} from './types';
 
 class Hero extends Character<HeroView> {
-    public readonly aim: HeroAim;
+    public readonly weapon: Weapon;
 
     protected override readonly speed: number = 6;
 
     private readonly controls: HeroControls;
-    private readonly onShoot: IOnShoot;
 
     private state: IHeroStates = HeroStates.stay;
     private movementContext: {left: IDirections; right: IDirections} = {left: Directions.stop, right: Directions.stop};
-    private bulletType: IBulletTypes = BulletTypes.regular;
 
     public constructor({view, onShoot}: IHeroParams) {
         super({view});
 
-        this.aim = new HeroAim(this);
         this.controls = new HeroControls(this);
-        this.onShoot = onShoot;
+        this.weapon = new Weapon({ownerId: this.uid, onShoot});
     }
 
     public get isInAir(): boolean {
@@ -67,11 +63,13 @@ class Hero extends Character<HeroView> {
     }
 
     public shoot(): void {
-        this.onShoot({
-            type: this.bulletType,
-            ownerId: this.uid,
-            damage: this.damage,
-            options: this.aim.getAim()
+        const config = HeroAimConfigs[this.view.state];
+        const facingLeft = this.view.direction === Directions.left;
+
+        this.weapon.fire({
+            x: this.x + (facingLeft ? this.bounds.width - config.x : config.x),
+            y: this.y + config.y,
+            rotation: facingLeft ? Math.PI - config.rotation : config.rotation
         });
     }
 
