@@ -1,5 +1,12 @@
 import {BulletTypes} from '../Bullets';
-import {type IAimContext, type IOnShoot, type IWeaponParams, type IWeaponTypes, WeaponTypes} from './types';
+import {
+    type IAimContext,
+    type IOnShoot,
+    type IShootParams,
+    type IWeaponParams,
+    type IWeaponTypes,
+    WeaponTypes
+} from './types';
 
 class Weapon {
     private _type: IWeaponTypes = WeaponTypes.regular;
@@ -32,14 +39,44 @@ class Weapon {
     }
 
     public fire(aimContext: IAimContext): void {
-        if (this._type === WeaponTypes.melee) return;
+        switch (this._type) {
+            case WeaponTypes.none:
+            case WeaponTypes.melee:
+                return;
+            case WeaponTypes.spread:
+                this.fireSpread(aimContext);
+                break;
+            case WeaponTypes.regular:
+                this.fireRegular(aimContext);
+                break;
+            default:
+                this.fireRegular(aimContext);
+        }
+    }
 
-        this.onShoot({
+    private get commonShootParams(): Omit<IShootParams, 'aimContext'> {
+        return {
             type: BulletTypes.regular,
             ownerId: this.ownerId,
-            damage: this.damage,
-            aimContext
-        });
+            damage: this.damage
+        };
+    }
+
+    private fireRegular(aimContext: IAimContext) {
+        this.onShoot({...this.commonShootParams, aimContext});
+    }
+
+    private fireSpread(aimContext: IAimContext) {
+        const spreadAngle = 0.1;
+        const bulletCount = 5;
+        const startAngle = aimContext.rotation - spreadAngle * (bulletCount - 1) * 0.5;
+
+        for (let i = 0; i < bulletCount; i++) {
+            this.onShoot({
+                ...this.commonShootParams,
+                aimContext: {...aimContext, rotation: startAngle + spreadAngle * i}
+            });
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 import {Directions, type IDirections, type ITicker} from '@/types';
 import {Character} from '../Entity';
-import {Weapon} from '../Weapon';
+import {Weapon, WeaponTypes} from '../Weapon';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
 import {HeroAimConfigs, HeroStates, type IHeroParams, type IHeroStates} from './types';
@@ -19,7 +19,7 @@ class Hero extends Character<HeroView> {
         super({view});
 
         this.controls = new HeroControls(this);
-        this.weapon = new Weapon({ownerId: this.uid, onShoot});
+        this.weapon = new Weapon({type: WeaponTypes.spread, ownerId: this.uid, onShoot});
     }
 
     public get isInAir(): boolean {
@@ -63,6 +63,7 @@ class Hero extends Character<HeroView> {
     }
 
     public shoot(): void {
+        if (this.destroyed) return;
         const config = HeroAimConfigs[this.view.state];
         const facingLeft = this.view.direction === Directions.left;
 
