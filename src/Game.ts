@@ -143,13 +143,17 @@ class Game {
         this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
     }
 
-    private checkPlatformCollisions(): void {
+    private checkObstaclesCollisions(): void {
         for (const platform of this.platforms) {
             this.entities.forEach(entity => {
                 if (entity.category !== EntityCategories.character) return;
 
                 const prevPos = this.characterPrevPositions.get(entity.uid);
                 if (!prevPos) return;
+
+                if (entity.uid === this.hero.uid && entity.x < -this.world.x) {
+                    entity.x = prevPos.x;
+                }
 
                 this.checkPlatformCollision(entity as Character, prevPos, platform);
             });
@@ -163,7 +167,7 @@ class Game {
         this.checkRunnerCollisions();
         this.updateEntities({deltaTime});
         this.updateBullets({deltaTime});
-        this.checkPlatformCollisions();
+        this.checkObstaclesCollisions();
         this.camera.update();
     }
 }
