@@ -64,7 +64,7 @@ class Hero extends Character<HeroView> {
 
     public shoot(): void {
         if (this.destroyed) return;
-        const config = HeroAimConfigs[this.view.state];
+        const config = HeroAimConfigs[this.controls.aimState];
         const facingLeft = this.view.direction === Directions.left;
 
         this.weapon.fire({

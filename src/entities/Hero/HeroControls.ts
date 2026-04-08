@@ -16,6 +16,17 @@ class HeroControls {
         return this.keyboard.isPressed(Keys.down);
     }
 
+    public get aimState(): IHeroViewStates {
+        if (this.hero.isInAir) {
+            if (this.isMovingX && this.isUp) return HeroViewStates.runUp;
+            if (this.isMovingX && this.isDown) return HeroViewStates.runDown;
+            if (this.isUp) return HeroViewStates.stayUp;
+            if (this.isDown) return HeroViewStates.stayDown;
+            return HeroViewStates.jump;
+        }
+        return this.currentViewState;
+    }
+
     public update(): void {
         const state = this.currentViewState;
         const direction = this.currentViewDirection;
