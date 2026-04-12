@@ -11,11 +11,19 @@ body {
     line-height: 1.4;
     font-weight: 400;
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
-    background: darkgray;
+    background: #0f1922;
     color: white;
     height: 100dvh;
     overflow-y: auto;
     scroll-behavior: smooth;
     @include h.customScrollBar;
+}
+
+#game {
+    flex: 0 0 auto;
+    width: 1024px;
+    height: 768px;
 }
