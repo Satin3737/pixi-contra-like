@@ -1,6 +1,6 @@
 import {Entity} from '../Entity';
 import type PlatformView from './PlatformView';
-import {type IPlatformParams, type IPlatformTypes, PlatformSteppableHeight, PlatformTypes} from './types';
+import {type IPlatformParams, type IPlatformTypes, PlatformDefaultHeight, PlatformTypes} from './types';
 
 class Platform extends Entity<PlatformView> {
     public readonly type: IPlatformTypes;
@@ -9,7 +9,7 @@ class Platform extends Entity<PlatformView> {
     public constructor({view, type, isSteppable}: IPlatformParams) {
         super({view});
         this.type = type;
-        this.isSteppable = isSteppable ?? (this.isSolid && this.bounds.height >= PlatformSteppableHeight);
+        this.isSteppable = isSteppable ?? (this.isSolid && this.bounds.height <= PlatformDefaultHeight);
     }
 
     private get isSolid(): boolean {

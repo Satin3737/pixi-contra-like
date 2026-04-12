@@ -7,7 +7,7 @@ class TurretFactory extends EntityFactory {
     public create({getTarget, onShoot, health, options}: ICreateTurretParams): Turret {
         const view = new TurretView({options});
         const turret = new Turret({view, health, getTarget, onShoot});
-        this.world.addChild(view);
+        this.world.game.addChild(view);
         return turret;
     }
 }

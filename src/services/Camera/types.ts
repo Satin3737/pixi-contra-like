@@ -1,10 +1,10 @@
-import type {Container} from 'pixi.js';
 import type {IPosSize} from '@/types';
 import type {Hero} from '@/entities';
+import type World from '@/Core/World';
 
 export interface ICamera {
     target: Hero;
-    world: Container;
+    world: World;
     screenSize: IPosSize;
     isBackScroll: boolean;
 }

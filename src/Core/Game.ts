@@ -1,6 +1,6 @@
-import {type Application, Container} from 'pixi.js';
+import type {Application} from 'pixi.js';
 import type {IPos, IPosSize, ITicker} from '@/types';
-import {PlatformsData, RunnersData, TurretsData} from '@/data';
+import {RunnersData, TurretsData} from '@/data';
 import {Camera, Physics} from '@/services';
 import {
     Bullet,
@@ -12,17 +12,18 @@ import {
     HeroFactory,
     type IShootParams,
     Platform,
-    PlatformFactory,
     PlatformTypes,
     Runner,
     RunnerFactory,
     TurretFactory
 } from '@/entities';
+import StageFactory from './StageFactory';
+import World from './World';
 
 class Game {
     private readonly hero: Hero;
     private readonly camera: Camera;
-    private readonly world: Container;
+    private readonly world: World;
     private readonly bulletFactory: BulletFactory;
     private readonly characterPrevPositions: Map<number, IPosSize> = new Map();
 
@@ -30,12 +31,14 @@ class Game {
     private entities: Entity[] = [];
     private platforms: Platform[] = [];
 
-    constructor(app: Application) {
-        this.world = new Container();
+    public constructor(app: Application) {
+        this.world = new World();
+
+        const stageFactory = new StageFactory(this.world, this.platforms);
+        stageFactory.createStage();
 
         const heroFactory = new HeroFactory(this.world);
         const runnerFactory = new RunnerFactory(this.world);
-        const platformFactory = new PlatformFactory(this.world);
         const turretFactory = new TurretFactory(this.world);
         this.bulletFactory = new BulletFactory(this.world);
 
@@ -61,8 +64,6 @@ class Game {
                 })
             );
         });
-
-        PlatformsData.forEach(params => this.platforms.push(platformFactory.create(params)));
 
         this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
 

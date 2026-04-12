@@ -1,12 +1,15 @@
-import type {ContainerOptions} from 'pixi.js';
-import type {ISize, IValueOf} from '@/types';
+import type {IPos, IValueOf} from '@/types';
 import type PlatformView from './PlatformView';
 
+export interface IPlatformsData {
+    y: number;
+    xBlockIndexes: number[];
+}
+
 export interface ICreatePlatformParams {
-    size: ISize;
     type: IPlatformTypes;
+    position: IPos;
     isSteppable?: boolean;
-    options?: ContainerOptions;
 }
 
 export interface IPlatformParams extends Omit<ICreatePlatformParams, 'options' | 'size'> {
@@ -22,4 +25,5 @@ export const PlatformTypes = {
 
 export type IPlatformTypes = IValueOf<typeof PlatformTypes>;
 
-export const PlatformSteppableHeight = 20;
+export const PlatformDefaultHeight = 24;
+export const PlatformDefaultWidth = 128;

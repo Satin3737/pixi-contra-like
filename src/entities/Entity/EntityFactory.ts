@@ -1,10 +1,10 @@
-import type {Container} from 'pixi.js';
+import type World from '@/Core/World';
 import type Entity from './Entity';
 
 abstract class EntityFactory {
-    protected readonly world: Container;
+    protected readonly world: World;
 
-    public constructor(world: Container) {
+    public constructor(world: World) {
         this.world = world;
     }
 

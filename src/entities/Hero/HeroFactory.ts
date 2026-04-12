@@ -7,7 +7,7 @@ class HeroFactory extends EntityFactory {
     public create({onShoot, ...params}: ICreateHeroParams): Hero {
         const view = new HeroView(params);
         const hero = new Hero({view, onShoot});
-        this.world.addChild(view);
+        this.world.game.addChild(view);
         return hero;
     }
 }

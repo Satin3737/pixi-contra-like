@@ -1,11 +1,11 @@
-import type {Container} from 'pixi.js';
 import type {IPosSize} from '@/types';
 import {Entity} from '@/entities';
+import type World from '@/Core/World';
 import type {ICamera} from './types';
 
 class Camera {
     private readonly target: Entity;
-    private readonly world: Container;
+    private readonly world: World;
     private readonly isBackScroll: boolean;
     private readonly centerScreenPosX: number;
     private readonly rightBorderPosX: number;
@@ -13,7 +13,7 @@ class Camera {
 
     private lastTargetX: number = 0;
 
-    constructor({target, world, screenSize, isBackScroll}: ICamera) {
+    public constructor({target, world, screenSize, isBackScroll}: ICamera) {
         this.target = target;
         this.world = world;
         this.screenSize = screenSize;

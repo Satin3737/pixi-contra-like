@@ -7,7 +7,7 @@ class BulletFactory extends EntityFactory {
     public create({type, ownerId, damage, options}: ICreateBulletParams): Bullet {
         const view = new BulletView({type, options});
         const bullet = new Bullet({view, ownerId, damage});
-        this.world.addChild(view);
+        this.world.foreground.addChild(view);
         return bullet;
     }
 }

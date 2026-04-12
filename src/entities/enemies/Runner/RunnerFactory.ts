@@ -7,7 +7,7 @@ class RunnerFactory extends EntityFactory {
     public create({onShoot, ...params}: ICreateRunnerParams): Runner {
         const view = new RunnerView(params);
         const runner = new Runner({view, onShoot});
-        this.world.addChild(view);
+        this.world.game.addChild(view);
         return runner;
     }
 }

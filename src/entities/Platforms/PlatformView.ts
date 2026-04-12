@@ -1,10 +1,17 @@
 import {Graphics} from 'pixi.js';
 import {EntityView} from '../Entity';
-import {type IPlatformTypes, type IPlatformViewParams, PlatformTypes} from './types';
+import {
+    type IPlatformTypes,
+    type IPlatformViewParams,
+    PlatformDefaultHeight,
+    PlatformDefaultWidth,
+    PlatformTypes
+} from './types';
 
 class PlatformView extends EntityView {
-    public constructor({type, size, options}: IPlatformViewParams) {
-        super({size, options});
+    public constructor({type, position}: IPlatformViewParams) {
+        const size = {width: PlatformDefaultWidth, height: PlatformDefaultHeight};
+        super({size, options: position});
         this.drawPlatform(type);
     }
 
