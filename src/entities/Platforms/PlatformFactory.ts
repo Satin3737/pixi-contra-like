@@ -7,7 +7,7 @@ class PlatformFactory extends EntityFactory {
     public create(params: ICreatePlatformParams): Platform {
         const view = new PlatformView(params);
         const platform = new Platform({...params, view});
-        this.world.background.addChild(view);
+        this.world[params.layer].addChild(view);
         return platform;
     }
 }

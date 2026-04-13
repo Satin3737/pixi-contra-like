@@ -1,4 +1,4 @@
-import type {IPos, IValueOf} from '@/types';
+import type {ILayers, IPos, ISize, IValueOf} from '@/types';
 import type PlatformView from './PlatformView';
 
 export interface IPlatformsData {
@@ -8,7 +8,10 @@ export interface IPlatformsData {
 
 export interface ICreatePlatformParams {
     type: IPlatformTypes;
+    viewType: IPlatformViewTypes;
     position: IPos;
+    layer: ILayers;
+    size?: ISize;
     isSteppable?: boolean;
 }
 
@@ -25,5 +28,15 @@ export const PlatformTypes = {
 
 export type IPlatformTypes = IValueOf<typeof PlatformTypes>;
 
+export const PlatformViewTypes = {
+    jungle: 'jungle',
+    jungleDark: 'jungleDark',
+    water: 'water'
+} as const;
+
+export type IPlatformViewTypes = IValueOf<typeof PlatformViewTypes>;
+
 export const PlatformDefaultHeight = 24;
 export const PlatformDefaultWidth = 128;
+
+export const DefaultPlatformSize = {width: PlatformDefaultWidth, height: PlatformDefaultHeight};

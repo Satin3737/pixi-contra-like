@@ -1,43 +1,49 @@
 import {Graphics} from 'pixi.js';
 import {EntityView} from '../Entity';
-import {
-    type IPlatformTypes,
-    type IPlatformViewParams,
-    PlatformDefaultHeight,
-    PlatformDefaultWidth,
-    PlatformTypes
-} from './types';
+import {DefaultPlatformSize, type IPlatformViewParams, type IPlatformViewTypes, PlatformViewTypes} from './types';
 
 class PlatformView extends EntityView {
-    public constructor({type, position}: IPlatformViewParams) {
-        const size = {width: PlatformDefaultWidth, height: PlatformDefaultHeight};
+    public constructor({viewType, position, size = DefaultPlatformSize}: IPlatformViewParams) {
         super({size, options: position});
-        this.drawPlatform(type);
+        this.drawPlatform(viewType);
     }
 
-    private drawPlatform(type: IPlatformTypes): void {
+    private drawPlatform(type: IPlatformViewTypes): void {
         switch (type) {
-            case PlatformTypes.normal:
-                this.drawNormalPlatform();
+            case PlatformViewTypes.jungle:
+                this.drawJunglePlatform();
                 break;
-            case PlatformTypes.solid:
-                this.drawSolidPlatform();
+            case PlatformViewTypes.jungleDark:
+                this.drawJungleDarkPlatform();
+                break;
+            case PlatformViewTypes.water:
+                this.drawWaterPlatform();
                 break;
             default:
-                this.drawNormalPlatform();
+                this.drawJunglePlatform();
         }
     }
 
-    private drawNormalPlatform(): void {
+    private drawJunglePlatform(): void {
         const graphics = new Graphics();
-        graphics.rect(0, 0, this.bounds.width, this.bounds.height).stroke({width: 1, color: 0x00ff00});
+        graphics.rect(0, 0, this.bounds.width, this.bounds.height).stroke({width: 1, color: 0x000000}).fill(0x00ff00);
         this.view.addChild(graphics);
     }
 
-    private drawSolidPlatform(): void {
+    private drawJungleDarkPlatform(): void {
         const graphics = new Graphics();
-        graphics.rect(0, 0, this.bounds.width, this.bounds.height).stroke({width: 1, color: 0x00ff00});
-        graphics.lineTo(this.bounds.width, this.bounds.height).stroke({width: 1, color: 0x00ff00});
+        graphics.rect(0, 0, this.bounds.width, this.bounds.height).stroke({width: 1, color: 0x000000}).fill(0x00ff00);
+        graphics.lineTo(this.bounds.width, this.bounds.height).stroke({width: 1, color: 0x000000});
+        this.view.addChild(graphics);
+    }
+
+    private drawWaterPlatform(): void {
+        const graphics = new Graphics();
+        graphics
+            .rect(0, -this.bounds.height, this.bounds.width, this.bounds.height)
+            .stroke({width: 1, color: 0x000000})
+            .fill(0x0000ff);
+        graphics.lineTo(this.bounds.width, this.bounds.height).stroke({width: 1, color: 0x000000});
         this.view.addChild(graphics);
     }
 }
