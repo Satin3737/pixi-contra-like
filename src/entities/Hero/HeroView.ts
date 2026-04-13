@@ -3,7 +3,7 @@ import {EntityView, type IEntityCommonParams} from '../Entity';
 import {HeroViewStates, type IHeroViewStates} from './types';
 
 class HeroView extends EntityView {
-    private readonly stroke: {width: number; color: number} = {width: 2, color: 0x0000ff};
+    private readonly stroke: {width: number; color: string} = {width: 2, color: 'yellow'};
     private readonly states: Record<IHeroViewStates, Graphics>;
 
     private _state: IHeroViewStates = HeroViewStates.stay;

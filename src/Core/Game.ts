@@ -21,9 +21,9 @@ import StageFactory from './StageFactory';
 import World from './World';
 
 class Game {
-    private readonly hero: Hero;
-    private readonly camera: Camera;
     private readonly world: World;
+    private readonly camera: Camera;
+    private readonly hero: Hero;
     private readonly bulletFactory: BulletFactory;
     private readonly characterPrevPositions: Map<number, IPosSize> = new Map();
 
@@ -42,7 +42,7 @@ class Game {
         const turretFactory = new TurretFactory(this.world);
         this.bulletFactory = new BulletFactory(this.world);
 
-        this.hero = heroFactory.create({onShoot: this.onShoot, options: {x: 100, y: 0}});
+        this.hero = heroFactory.create({onShoot: this.onShoot, options: {x: 200, y: 0}});
         this.entities.push(this.hero);
 
         TurretsData.forEach(({health, options}) => {
@@ -76,10 +76,10 @@ class Game {
         if (character.isSkipCollision && !isSolid) return;
 
         const collision = Physics.getPlatformCollision(character.bounds, platform.bounds, prevPos);
-        collision.vertical && character.land(platform.y, isSolid);
+        collision.vertical && character.land(platform.y, platform.type);
 
         if (collision.horizontal) {
-            platform.isSteppable && character.land(platform.y, isSolid);
+            platform.isSteppable && character.land(platform.y, platform.type);
             isSolid && (character.x = prevPos.x);
         }
     }

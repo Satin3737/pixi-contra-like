@@ -1,6 +1,7 @@
 import {Directions, type IMovement, type ITicker} from '@/types';
 import {getRandomBoolean} from '@/utils';
 import {Character} from '../../Entity';
+import {type IPlatformTypes, PlatformTypes} from '../../Platforms';
 import {Weapon, WeaponTypes} from '../../Weapon';
 import RunnerView from './RunnerView';
 import {type IRunnerParams, type IRunnerStates, RunnerStates} from './types';
@@ -11,7 +12,6 @@ class Runner extends Character<RunnerView> {
     protected override movement: IMovement = {x: Directions.left, y: Directions.stop};
 
     private state: IRunnerStates = RunnerStates.run;
-    private isStayOnSolid: boolean = false;
 
     public constructor({view, onShoot}: IRunnerParams) {
         super({view});
@@ -33,11 +33,11 @@ class Runner extends Character<RunnerView> {
         this.velocity.y = -this.jumpForce;
     }
 
-    public land(y: number, isSolid: boolean): void {
+    public land(y: number, platformType: IPlatformTypes): void {
+        this.stayOn = platformType;
         this.state = RunnerStates.run;
         this.y = y - this.bounds.height;
         this.velocity.y = Directions.stop;
-        this.isStayOnSolid = isSolid;
     }
 
     public override update({deltaTime}: ITicker): void {
@@ -45,7 +45,7 @@ class Runner extends Character<RunnerView> {
         this.x += this.velocity.x;
 
         if (this.velocity.y > 0) {
-            if (!this.isInAir && !this.isStayOnSolid && getRandomBoolean()) {
+            if (!this.isInAir && this.stayOn !== PlatformTypes.solid && getRandomBoolean()) {
                 this.jump();
             } else {
                 this.state = RunnerStates.fall;

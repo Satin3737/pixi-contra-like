@@ -1,5 +1,6 @@
 import {Directions, type IDirections, type ITicker} from '@/types';
 import {Character} from '../Entity';
+import {type IPlatformTypes, PlatformTypes} from '../Platforms';
 import {Weapon, WeaponTypes} from '../Weapon';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
@@ -51,12 +52,14 @@ class Hero extends Character<HeroView> {
     }
 
     public jump(isDown: boolean): void {
-        if (this.isInAir) return;
+        if (this.isInAir || (isDown && this.stayOn === PlatformTypes.solid)) return;
+        this.stayOn = null;
         this.state = HeroStates.jump;
         !isDown && (this.velocity.y = -this.jumpForce);
     }
 
-    public land(y: number, _: boolean): void {
+    public land(y: number, platformType: IPlatformTypes): void {
+        this.stayOn = platformType;
         this.state = HeroStates.stay;
         this.y = y - this.bounds.height;
         this.velocity.y = Directions.stop;
