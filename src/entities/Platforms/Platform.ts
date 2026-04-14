@@ -6,8 +6,8 @@ class Platform extends Entity<PlatformView> {
     public readonly type: IPlatformTypes;
     public readonly isSteppable: boolean;
 
-    public constructor({view, type, isSteppable}: IPlatformParams) {
-        super({view});
+    public constructor({view, type, health, isSteppable}: IPlatformParams) {
+        super({view, health: health ?? Infinity});
         this.type = type;
         this.isSteppable = isSteppable ?? (this.isSolid && this.bounds.height <= PlatformDefaultHeight);
     }

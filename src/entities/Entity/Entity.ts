@@ -56,11 +56,11 @@ class Entity<TEntityView extends EntityView = EntityView> {
         if (this._health <= 0) this.destroy();
     }
 
-    public update(_: ITicker): void {}
-
     public destroy(): void {
         this.view.destroy();
     }
+
+    public update(_: ITicker): void {}
 }
 
 export default Entity;

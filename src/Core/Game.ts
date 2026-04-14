@@ -76,7 +76,14 @@ class Game {
         if (character.isSkipCollision && !isSolid) return;
 
         const collision = Physics.getPlatformCollision(character.bounds, platform.bounds, prevPos);
-        collision.vertical && character.land(platform.y, platform.type);
+
+        if (collision.vertical) {
+            character.land(platform.y, platform.type);
+
+            if (character.uid === this.hero.uid && platform.type === PlatformTypes.fragile) {
+                platform.takeDamage(this.hero.weapon.damage);
+            }
+        }
 
         if (collision.horizontal) {
             platform.isSteppable && character.land(platform.y, platform.type);
@@ -144,6 +151,10 @@ class Game {
         this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
     }
 
+    private updatePlatforms(): void {
+        this.platforms = this.platforms.filter(platform => !platform.destroyed);
+    }
+
     private checkObstaclesCollisions(): void {
         for (const platform of this.platforms) {
             this.entities.forEach(entity => {
@@ -168,6 +179,7 @@ class Game {
         this.checkRunnerCollisions();
         this.updateEntities({deltaTime});
         this.updateBullets({deltaTime});
+        this.updatePlatforms();
         this.checkObstaclesCollisions();
         this.camera.update();
     }

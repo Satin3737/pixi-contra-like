@@ -12,10 +12,11 @@ export interface ICreatePlatformParams {
     position: IPos;
     layer: ILayers;
     size?: ISize;
+    health?: number;
     isSteppable?: boolean;
 }
 
-export interface IPlatformParams extends Omit<ICreatePlatformParams, 'options' | 'size'> {
+export interface IPlatformParams extends Pick<ICreatePlatformParams, 'type' | 'health' | 'isSteppable'> {
     view: PlatformView;
 }
 
@@ -23,6 +24,7 @@ export type IPlatformViewParams = Omit<ICreatePlatformParams, 'isSteppable'>;
 
 export const PlatformTypes = {
     normal: 'normal',
+    fragile: 'fragile',
     solid: 'solid'
 } as const;
 
@@ -31,7 +33,9 @@ export type IPlatformTypes = IValueOf<typeof PlatformTypes>;
 export const PlatformViewTypes = {
     jungle: 'jungle',
     jungleDark: 'jungleDark',
-    water: 'water'
+    water: 'water',
+    bridge: 'bridge',
+    boss: 'boss'
 } as const;
 
 export type IPlatformViewTypes = IValueOf<typeof PlatformViewTypes>;
