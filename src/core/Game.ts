@@ -50,6 +50,8 @@ class Game {
     }
 
     private checkPlatformCollision(character: Character, prevPos: IPos, platform: Platform): void {
+        if (platform.destroyed) return;
+
         const isSolid = platform.type === PlatformTypes.solid;
         if (character.isSkipCollision && !isSolid) return;
 
@@ -89,16 +91,20 @@ class Game {
         });
     }
 
-    private checkRunnerCollisions(): void {
+    private checkEnemiesCollisions(): void {
         this.entities.forEach(entity => {
-            if (entity.destroyed || !(entity instanceof Runner)) return;
+            if (entity.destroyed) return;
 
-            if (Physics.isOutOfBounds(entity, this.camera.visibleAreaBounds)) {
+            if (Physics.isOutOfBoundsLeft(entity.bounds, this.camera.visibleAreaBounds)) {
                 entity.destroy();
                 return;
             }
 
-            if (!this.hero.destroyed && Physics.isAABBCollision(entity.bounds, this.hero.bounds)) {
+            if (
+                !this.hero.destroyed &&
+                entity instanceof Runner &&
+                Physics.isAABBCollision(entity.bounds, this.hero.bounds)
+            ) {
                 this.hero.takeDamage(entity.weapon.damage);
                 entity.destroy();
             }
@@ -122,7 +128,7 @@ class Game {
     private updateBullets({deltaTime}: ITicker): void {
         this.bullets.forEach(bullet => {
             if (bullet.destroyed) return;
-            Physics.isOutOfBounds(bullet, this.camera.visibleAreaBounds) && bullet.destroy();
+            Physics.isOutOfBoundsAll(bullet.bounds, this.camera.visibleAreaBounds) && bullet.destroy();
             !bullet.destroyed && bullet.update({deltaTime});
         });
 
@@ -154,7 +160,7 @@ class Game {
 
     private update({deltaTime}: ITicker): void {
         this.checkBulletCollisions();
-        this.checkRunnerCollisions();
+        this.checkEnemiesCollisions();
         this.updateEntities({deltaTime});
         this.updateBullets({deltaTime});
         this.updatePlatforms();
