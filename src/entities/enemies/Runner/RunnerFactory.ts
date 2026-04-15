@@ -1,12 +1,12 @@
-import {EntityFactory} from '../../Entity';
+import type {IEntityCommonParams} from '@/entities';
+import {EnemyFactory} from '../Enemy';
 import Runner from './Runner';
 import RunnerView from './RunnerView';
-import type {ICreateRunnerParams} from './types';
 
-class RunnerFactory extends EntityFactory {
-    public create({onShoot, ...params}: ICreateRunnerParams): Runner {
+class RunnerFactory extends EnemyFactory<IEntityCommonParams, Runner> {
+    public create(params: IEntityCommonParams): Runner {
         const view = new RunnerView(params);
-        const runner = new Runner({view, onShoot});
+        const runner = new Runner({view, onShoot: this.onShoot});
         this.world.game.addChild(view);
         return runner;
     }

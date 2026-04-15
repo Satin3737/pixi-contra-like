@@ -1,14 +1,10 @@
 import type {IValueOf} from '@/types';
-import type {IEntityCommonParams} from '../../Entity';
 import type {IOnShoot} from '../../Weapon';
 import type RunnerView from './RunnerView';
 
-export interface ICreateRunnerParams extends IEntityCommonParams {
-    onShoot: IOnShoot;
-}
-
-export interface IRunnerParams extends Pick<ICreateRunnerParams, 'onShoot'> {
+export interface IRunnerParams {
     view: RunnerView;
+    onShoot: IOnShoot;
 }
 
 export const RunnerStates = {

@@ -8,7 +8,7 @@ class Entity<TEntityView extends EntityView = EntityView> {
 
     private _health: number = 1;
 
-    public constructor({view, health}: IEntityParams<TEntityView>) {
+    protected constructor({view, health}: IEntityParams<TEntityView>) {
         this.view = view;
         if (health !== undefined) this._health = health;
     }

@@ -1,8 +1,9 @@
 import {type ITicker} from '@/types';
 import {Entity} from '../../Entity';
 import {Weapon} from '../../Weapon';
+import type {IGetTarget} from '../Enemy';
 import TurretView from './TurretView';
-import type {IGetTarget, ITurretParams} from './types';
+import type {ITurretParams} from './types';
 
 class Turret extends Entity<TurretView> {
     private readonly weapon: Weapon;

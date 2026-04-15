@@ -1,6 +1,5 @@
 import type {Application} from 'pixi.js';
 import type {IPos, IPosSize, ITicker} from '@/types';
-import {RunnersData, TurretsData} from '@/data';
 import {Camera, Physics} from '@/services';
 import {
     Bullet,
@@ -13,9 +12,7 @@ import {
     type IShootParams,
     Platform,
     PlatformTypes,
-    Runner,
-    RunnerFactory,
-    TurretFactory
+    Runner
 } from '@/entities';
 import StageFactory from './StageFactory';
 import World from './World';
@@ -33,37 +30,18 @@ class Game {
 
     public constructor(app: Application) {
         this.world = new World();
-
-        const stageFactory = new StageFactory(this.world, this.platforms);
-        stageFactory.createStage();
-
-        const heroFactory = new HeroFactory(this.world);
-        const runnerFactory = new RunnerFactory(this.world);
-        const turretFactory = new TurretFactory(this.world);
         this.bulletFactory = new BulletFactory(this.world);
 
-        this.hero = heroFactory.create({onShoot: this.onShoot, options: {x: 200, y: 0}});
+        this.hero = new HeroFactory(this.world).create({onShoot: this.onShoot, options: {x: 200, y: 0}});
         this.entities.push(this.hero);
 
-        TurretsData.forEach(({health, options}) => {
-            this.entities.push(
-                turretFactory.create({
-                    getTarget: () => this.hero.centerPoint,
-                    onShoot: this.onShoot,
-                    health,
-                    options
-                })
-            );
-        });
-
-        RunnersData.forEach(({options}) => {
-            this.entities.push(
-                runnerFactory.create({
-                    onShoot: this.onShoot,
-                    options
-                })
-            );
-        });
+        new StageFactory({
+            world: this.world,
+            platforms: this.platforms,
+            entities: this.entities,
+            onShoot: this.onShoot,
+            getTarget: () => this.hero.centerPoint
+        }).createStage();
 
         this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
 

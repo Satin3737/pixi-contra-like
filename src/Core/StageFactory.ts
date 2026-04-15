@@ -4,9 +4,13 @@ import {
     PlatformsFragileData,
     PlatformsGroundData,
     PlatformsNormalData,
-    PlatformsWaterData
+    PlatformsWaterData,
+    RunnersData,
+    TurretsData
 } from '@/data';
 import {
+    EnemiesFactory,
+    Entity,
     type IPlatformTypes,
     type IPlatformViewTypes,
     type IPlatformsData,
@@ -17,20 +21,37 @@ import {
     PlatformTypes,
     PlatformViewTypes
 } from '@/entities';
-import type World from './World';
+import type {IStageFactoryParams} from './types';
 
 class StageFactory {
-    private readonly world: World;
     private readonly platformsFactory: PlatformFactory;
+    private readonly enemiesFactory: EnemiesFactory;
     private readonly platforms: Platform[];
+    private readonly entities: Entity[];
 
-    public constructor(world: World, platforms: Platform[]) {
-        this.world = world;
+    public constructor({world, platforms, entities, onShoot, getTarget}: IStageFactoryParams) {
+        this.platformsFactory = new PlatformFactory(world);
+        this.enemiesFactory = new EnemiesFactory({world, onShoot, getTarget});
         this.platforms = platforms;
-        this.platformsFactory = new PlatformFactory(this.world);
+        this.entities = entities;
     }
 
     public createStage(): void {
+        this.createLevel();
+        this.createEnemies();
+    }
+
+    private createEnemies(): void {
+        TurretsData.forEach(({health, options}) => {
+            this.entities.push(this.enemiesFactory.createTurret({health, options}));
+        });
+
+        RunnersData.forEach(({options}) => {
+            this.entities.push(this.enemiesFactory.createRunner({options}));
+        });
+    }
+
+    private createLevel(): void {
         this.createNormalPlatforms();
         this.createGround();
         this.createWater();
