@@ -1,5 +1,5 @@
 import {Graphics} from 'pixi.js';
-import {BaseAppSize} from '@/Core/const';
+import {BaseAppSize} from '@/core';
 import {EntityView} from '../Entity';
 import {DefaultPlatformSize, type IPlatformViewParams, type IPlatformViewTypes, PlatformViewTypes} from './types';
 

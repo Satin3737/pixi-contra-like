@@ -1,5 +1,5 @@
 import type {IPos} from '@/types';
-import type World from '@/Core/World';
+import type {World} from '@/core';
 import type {IOnShoot} from '../../Weapon';
 
 export type IGetTarget = () => IPos | undefined;

@@ -1,6 +1,6 @@
 import type {IPosSize} from '@/types';
+import type {World} from '@/core';
 import type {Hero} from '@/entities';
-import type World from '@/Core/World';
 
 export interface ICamera {
     target: Hero;

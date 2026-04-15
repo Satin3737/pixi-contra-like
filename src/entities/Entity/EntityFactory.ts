@@ -1,4 +1,4 @@
-import type World from '@/Core/World';
+import type {World} from '@/core';
 import type Entity from './Entity';
 
 abstract class EntityFactory<TParams, TEntity extends Entity> {

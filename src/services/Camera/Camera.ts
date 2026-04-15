@@ -1,6 +1,6 @@
 import type {IPosSize} from '@/types';
+import type {World} from '@/core';
 import {Entity} from '@/entities';
-import type World from '@/Core/World';
 import type {ICamera} from './types';
 
 class Camera {
