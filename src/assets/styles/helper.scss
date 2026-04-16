@@ -1,3 +1,7 @@
+@function alpha($color, $opacity) {
+    @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
+}
+
 @mixin hideScrollBar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -8,7 +12,7 @@
 }
 
 @mixin customScrollBar {
-    scrollbar-color: aquamarine gray;
+    scrollbar-color: var(--c-sun) var(--c-black);
     scrollbar-width: thin;
 
     &::-webkit-scrollbar {
@@ -17,12 +21,12 @@
     }
 
     &::-webkit-scrollbar-track {
-        background-color: gray;
+        background-color: var(--c-black);
         border-radius: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: aquamarine;
+        background-color: var(--c-sun);
         border-radius: 4px;
     }
 

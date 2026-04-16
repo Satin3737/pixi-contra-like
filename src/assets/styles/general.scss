@@ -1,8 +1,18 @@
 @use 'reboot';
 @use 'helper' as h;
+@use 'responsive' as r;
+
+:root {
+    --c-bg: #211b45;
+    --c-text: #ffffff;
+    --c-neon: #00ffff;
+    --c-black: #000000;
+    --c-sun: #210647;
+}
 
 html {
     overflow-x: hidden;
+    @include h.customScrollBar;
 }
 
 body {
@@ -11,19 +21,85 @@ body {
     line-height: 1.4;
     font-weight: 400;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background: #0f1922;
-    color: white;
+    background: var(--c-bg);
+    color: var(--c-text);
     height: 100dvh;
-    overflow-y: auto;
+    overflow: hidden;
     scroll-behavior: smooth;
-    @include h.customScrollBar;
+    position: relative;
+    padding: 8px;
+
+    &:before {
+        content: '';
+        position: absolute;
+        height: 90%;
+        width: 1200px;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(0deg, transparent 0%, transparent 50%, h.alpha(var(--c-sun), 0.8) 100%);
+        border-radius: 50%;
+        z-index: 1;
+        filter: blur(16px);
+
+        @include r.responsiveBelow(1200px) {
+            width: 800px;
+        }
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, var(--c-black), var(--c-black) 40%, h.alpha(var(--c-black), 0.4) 100%);
+        backdrop-filter: blur(1px);
+    }
+}
+
+.bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+
+    &:after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(0deg, var(--c-neon) 2px, transparent 2px),
+            linear-gradient(90deg, var(--c-neon) 2px, transparent 2px);
+        background-size: 50px 50px;
+        transform-origin: center;
+        transform: perspective(500px) rotateX(60deg);
+        animation: grid 30s linear infinite;
+    }
+}
+
+.main {
+    flex: 0 0 auto;
+    margin: auto;
+    overflow: auto;
+    padding: 4px;
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 #game {
-    flex: 0 0 auto;
     width: 1024px;
     height: 768px;
+    max-width: 100%;
+    outline: 1px solid var(--c-neon);
+}
+
+@keyframes grid {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 50px;
+    }
 }
