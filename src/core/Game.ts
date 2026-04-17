@@ -33,6 +33,7 @@ class Game {
         this.bulletFactory = new BulletFactory(this.world);
 
         this.hero = new HeroFactory(this.world).create({onShoot: this.onShoot, options: {x: 200, y: 0}});
+        this.hero.isActive = true;
         this.entities.push(this.hero);
 
         new StageFactory({

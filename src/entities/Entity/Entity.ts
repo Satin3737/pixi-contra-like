@@ -6,6 +6,7 @@ class Entity<TEntityView extends EntityView = EntityView> {
     public readonly view: TEntityView;
     public readonly category: IEntityCategories = EntityCategories.entity;
 
+    private _isActive: boolean = false;
     private _health: number = 1;
 
     protected constructor({view, health}: IEntityParams<TEntityView>) {
@@ -27,6 +28,14 @@ class Entity<TEntityView extends EntityView = EntityView> {
 
     public set y(value: number) {
         this.view.y = value;
+    }
+
+    public get isActive(): boolean {
+        return this._isActive;
+    }
+
+    public set isActive(value: boolean) {
+        this._isActive = value;
     }
 
     public get centerPoint(): IPos | undefined {

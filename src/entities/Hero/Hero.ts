@@ -78,6 +78,8 @@ class Hero extends Character<HeroView> {
     }
 
     public override update({deltaTime}: ITicker): void {
+        if (!this.isActive) return;
+
         this.velocity.x = this.movement.x * this.speed * deltaTime;
         this.x += this.velocity.x;
 

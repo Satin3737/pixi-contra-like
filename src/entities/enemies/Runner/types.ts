@@ -1,10 +1,9 @@
 import type {IValueOf} from '@/types';
-import type {IOnShoot} from '../../Weapon';
+import type {IEnemyTargeting} from '../Enemy';
 import type RunnerView from './RunnerView';
 
-export interface IRunnerParams {
+export interface IRunnerParams extends IEnemyTargeting {
     view: RunnerView;
-    onShoot: IOnShoot;
 }
 
 export const RunnerStates = {

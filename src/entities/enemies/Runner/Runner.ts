@@ -1,8 +1,10 @@
 import {Directions, type IMovement, type ITicker} from '@/types';
 import {getRandomBoolean} from '@/utils';
+import {BaseAppSize} from '@/core';
 import {Character} from '../../Entity';
 import {type IPlatformTypes, PlatformTypes} from '../../Platforms';
 import {Weapon, WeaponTypes} from '../../Weapon';
+import type {IGetTarget} from '../Enemy';
 import RunnerView from './RunnerView';
 import {type IRunnerParams, type IRunnerStates, RunnerStates} from './types';
 
@@ -11,11 +13,14 @@ class Runner extends Character<RunnerView> {
 
     protected override movement: IMovement = {x: Directions.left, y: Directions.stop};
 
+    private readonly getTarget: IGetTarget;
+
     private state: IRunnerStates = RunnerStates.run;
 
-    public constructor({view, onShoot}: IRunnerParams) {
+    public constructor({view, onShoot, getTarget}: IRunnerParams) {
         super({view});
 
+        this.getTarget = getTarget;
         this.weapon = new Weapon({type: WeaponTypes.melee, ownerId: this.uid, onShoot});
     }
 
@@ -41,6 +46,12 @@ class Runner extends Character<RunnerView> {
     }
 
     public override update({deltaTime}: ITicker): void {
+        if (!this.isActive) {
+            const target = this.getTarget();
+            this.isActive = !!target && this.x - target.x < BaseAppSize.width * 0.5 + this.bounds.width;
+            return;
+        }
+
         this.velocity.x = this.movement.x * this.speed * deltaTime;
         this.x += this.velocity.x;
 

@@ -1,4 +1,5 @@
 import {type ITicker} from '@/types';
+import {BaseAppSize} from '@/core';
 import {Entity} from '../../Entity';
 import {Weapon} from '../../Weapon';
 import type {IGetTarget} from '../Enemy';
@@ -22,6 +23,11 @@ class Turret extends Entity<TurretView> {
     public override update({deltaTime}: ITicker): void {
         const target = this.getTarget();
         if (!target) return;
+
+        if (!this.isActive) {
+            this.isActive = this.x - target.x < BaseAppSize.width * 0.5 + this.bounds.width;
+            return;
+        }
 
         const center = this.centerPoint;
         if (!center) return;

@@ -6,7 +6,7 @@ import RunnerView from './RunnerView';
 class RunnerFactory extends EnemyFactory<IEntityCommonParams, Runner> {
     public create(params: IEntityCommonParams): Runner {
         const view = new RunnerView(params);
-        const runner = new Runner({view, onShoot: this.onShoot});
+        const runner = new Runner({view, onShoot: this.onShoot, getTarget: this.getTarget});
         this.world.game.addChild(view);
         return runner;
     }

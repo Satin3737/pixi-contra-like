@@ -12,7 +12,7 @@ export const PlatformsNormalData: IPlatformsData[] = [
         y: 384
     },
     {
-        xBlockIndexes: [5, 6, 7, 13, 14, 31, 32, 42, 43, 49],
+        xBlockIndexes: [5, 6, 7, 13, 14, 16, 31, 32, 42, 43, 49],
         y: 492
     },
     {

@@ -1,14 +1,11 @@
 import type {IEntityCommonParams} from '../../Entity';
-import type {IOnShoot} from '../../Weapon';
-import type {IGetTarget} from '../Enemy/types';
+import type {IEnemyTargeting} from '../Enemy';
 import type TurretView from './TurretView';
 
 export interface ICreateTurretParams extends IEntityCommonParams {
     health?: number;
 }
 
-export interface ITurretParams extends Omit<ICreateTurretParams, 'options'> {
+export interface ITurretParams extends Omit<ICreateTurretParams, 'options'>, IEnemyTargeting {
     view: TurretView;
-    getTarget: IGetTarget;
-    onShoot: IOnShoot;
 }

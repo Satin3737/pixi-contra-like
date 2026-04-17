@@ -4,8 +4,11 @@ import type {IOnShoot} from '../../Weapon';
 
 export type IGetTarget = () => IPos | undefined;
 
-export interface IEnemyFactoryParams {
-    world: World;
+export interface IEnemyTargeting {
     onShoot: IOnShoot;
     getTarget: IGetTarget;
+}
+
+export interface IEnemyFactoryParams extends IEnemyTargeting {
+    world: World;
 }
