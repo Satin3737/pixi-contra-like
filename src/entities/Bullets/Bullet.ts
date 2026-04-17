@@ -7,7 +7,7 @@ class Bullet extends Entity<BulletView> {
     public readonly ownerId: number;
     public readonly damage: number;
 
-    private readonly speed: number = 24;
+    private readonly speed: number = 16;
 
     public constructor({view, ownerId, damage}: IBulletParams) {
         super({view});

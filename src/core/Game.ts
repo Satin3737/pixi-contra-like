@@ -61,7 +61,7 @@ class Game {
         if (collision.vertical) {
             character.land(platform.y, platform.type);
 
-            if (character.uid === this.hero.uid && platform.type === PlatformTypes.fragile) {
+            if (character instanceof Hero && platform.type === PlatformTypes.fragile) {
                 platform.takeDamage(this.hero.weapon.damage);
             }
         }
@@ -92,20 +92,24 @@ class Game {
         });
     }
 
-    private checkEnemiesCollisions(): void {
+    private checkEntitiesOutOfBounds(): void {
         this.entities.forEach(entity => {
             if (entity.destroyed) return;
 
-            if (Physics.isOutOfBoundsLeft(entity.bounds, this.camera.visibleAreaBounds)) {
-                entity.destroy();
-                return;
-            }
+            const isOutOfBounds =
+                entity instanceof Hero
+                    ? Physics.isOutOfBoundsOnlyBottom(entity.bounds, this.camera.visibleAreaBounds)
+                    : Physics.isOutOfBoundsLeft(entity.bounds, this.camera.visibleAreaBounds);
 
-            if (
-                !this.hero.destroyed &&
-                entity instanceof Runner &&
-                Physics.isAABBCollision(entity.bounds, this.hero.bounds)
-            ) {
+            isOutOfBounds && entity.destroy();
+        });
+    }
+
+    private checkEnemiesContactCollisions(): void {
+        this.entities.forEach(entity => {
+            if (this.hero.destroyed || entity.destroyed || !(entity instanceof Runner)) return;
+
+            if (Physics.isAABBCollision(entity.bounds, this.hero.bounds)) {
                 this.hero.takeDamage(entity.weapon.damage);
                 entity.destroy();
             }
@@ -148,7 +152,7 @@ class Game {
                 const prevPos = this.characterPrevPositions.get(entity.uid);
                 if (!prevPos) return;
 
-                if (entity.uid === this.hero.uid && entity.x < -this.world.x) {
+                if (entity instanceof Hero && entity.x < -this.world.x) {
                     entity.x = prevPos.x;
                 }
 
@@ -161,7 +165,8 @@ class Game {
 
     private update({deltaTime}: ITicker): void {
         this.checkBulletCollisions();
-        this.checkEnemiesCollisions();
+        this.checkEntitiesOutOfBounds();
+        this.checkEnemiesContactCollisions();
         this.updateEntities({deltaTime});
         this.updateBullets({deltaTime});
         this.updatePlatforms();
