@@ -1,6 +1,6 @@
 import {Graphics} from 'pixi.js';
 import {EntityView, type IEntityCommonParams} from '../Entity';
-import {HeroViewStates, type IHeroViewStates} from './types';
+import {HeroHitBoxConfigs, HeroViewStates, type IHeroViewStates} from './types';
 
 class HeroView extends EntityView {
     private readonly stroke: {width: number; color: string} = {width: 2, color: 'yellow'};
@@ -26,6 +26,9 @@ class HeroView extends EntityView {
             view.visible = this._state === state;
             this.view.addChild(view);
         });
+
+        this.drawDebugHitBox(this._state);
+        this.view.addChild(this.debugHitBox);
     }
 
     public get state(): IHeroViewStates {
@@ -37,6 +40,16 @@ class HeroView extends EntityView {
         Object.values(this.states).forEach(view => (view.visible = false));
         this.states[state].visible = true;
         this._state = state;
+        this.drawDebugHitBox(state);
+    }
+
+    private drawDebugHitBox(state: IHeroViewStates): void {
+        const {shiftX, shiftY, width, height} = HeroHitBoxConfigs[state];
+        this.debugHitBox.clear();
+        this.debugHitBox
+            .rect(shiftX, shiftY, width, height)
+            .fill({color: 0xff0000, alpha: 0.35})
+            .stroke({width: 1, color: 0xff0000, alpha: 0.9});
     }
 
     private drawStayView(): Graphics {

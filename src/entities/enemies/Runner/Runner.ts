@@ -6,7 +6,7 @@ import {type IPlatformTypes, PlatformTypes} from '../../Platforms';
 import {Weapon, WeaponTypes} from '../../Weapon';
 import type {IGetTarget} from '../Enemy';
 import RunnerView from './RunnerView';
-import {type IRunnerParams, type IRunnerStates, RunnerStates} from './types';
+import {type IRunnerParams, type IRunnerStates, RunnerHitBoxConfigs, RunnerStates} from './types';
 
 class Runner extends Character<RunnerView> {
     public readonly weapon: Weapon;
@@ -65,6 +65,9 @@ class Runner extends Character<RunnerView> {
 
         this.velocity.y += this.gravityForce * deltaTime;
         this.y += this.velocity.y;
+
+        this.view.show(this.state);
+        this.hitbox = RunnerHitBoxConfigs[this.state];
     }
 }
 

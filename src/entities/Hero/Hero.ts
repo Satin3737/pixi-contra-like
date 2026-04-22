@@ -4,7 +4,7 @@ import {type IPlatformTypes, PlatformTypes} from '../Platforms';
 import {Weapon, WeaponTypes} from '../Weapon';
 import HeroControls from './HeroControls';
 import HeroView from './HeroView';
-import {HeroAimConfigs, HeroStates, type IHeroParams, type IHeroStates} from './types';
+import {HeroAimConfigs, HeroHitBoxConfigs, HeroStates, type IHeroParams, type IHeroStates} from './types';
 
 class Hero extends Character<HeroView> {
     public readonly weapon: Weapon;
@@ -91,6 +91,16 @@ class Hero extends Character<HeroView> {
         this.y += this.velocity.y;
 
         this.controls.update();
+        this.updateHitBox();
+    }
+
+    private updateHitBox(): void {
+        const hitConfig = HeroHitBoxConfigs[this.view.state];
+        const facingLeft = this.view.direction === Directions.left;
+
+        this.hitbox = facingLeft
+            ? {...hitConfig, shiftX: this.bounds.width - hitConfig.shiftX - hitConfig.width}
+            : hitConfig;
     }
 }
 

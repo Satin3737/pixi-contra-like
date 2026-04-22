@@ -1,5 +1,5 @@
 import type {IValueOf} from '@/types';
-import type {IEntityCommonParams} from '../Entity';
+import type {IEntityCommonParams, IEntityHitBoxConfig} from '../Entity';
 import type {IAimContext, IOnShoot} from '../Weapon';
 import type HeroView from './HeroView';
 
@@ -42,4 +42,15 @@ export const HeroAimConfigs: Record<IHeroViewStates, IAimContext> = {
     [HeroViewStates.runDown]: {x: 40, y: 60, rotation: Math.PI / 4},
     [HeroViewStates.jump]: {x: 30, y: 45, rotation: 0},
     [HeroViewStates.lay]: {x: 20, y: 70, rotation: 0}
+} as const;
+
+export const HeroHitBoxConfigs: Record<IHeroViewStates, IEntityHitBoxConfig> = {
+    [HeroViewStates.stay]: {shiftX: 0, shiftY: 0, width: 20, height: 80},
+    [HeroViewStates.stayUp]: {shiftX: 0, shiftY: 0, width: 20, height: 80},
+    [HeroViewStates.stayDown]: {shiftX: 0, shiftY: 0, width: 20, height: 80},
+    [HeroViewStates.run]: {shiftX: 0, shiftY: 0, width: 20, height: 80},
+    [HeroViewStates.runUp]: {shiftX: 0, shiftY: 0, width: 20, height: 80},
+    [HeroViewStates.runDown]: {shiftX: 0, shiftY: 0, width: 20, height: 80},
+    [HeroViewStates.jump]: {shiftX: -10, shiftY: 25, width: 40, height: 40},
+    [HeroViewStates.lay]: {shiftX: -80, shiftY: 60, width: 80, height: 20}
 } as const;

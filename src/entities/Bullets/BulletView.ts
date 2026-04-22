@@ -1,11 +1,13 @@
 import {Graphics} from 'pixi.js';
 import {EntityView} from '../Entity';
-import {BulletSizes, BulletTypes, type IBulletTypes, type IBulletViewParams} from './types';
+import {BulletHitBoxConfigs, BulletSizes, BulletTypes, type IBulletTypes, type IBulletViewParams} from './types';
 
 class BulletView extends EntityView {
     public constructor({type, options}: IBulletViewParams) {
         super({size: BulletSizes[type], options});
         this.drawBullet(type);
+        this.drawDebugHitBox(type);
+        this.view.addChild(this.debugHitBox);
     }
 
     private drawBullet(type: IBulletTypes) {
@@ -16,6 +18,14 @@ class BulletView extends EntityView {
             default:
                 this.drawRegularBullet();
         }
+    }
+
+    private drawDebugHitBox(type: IBulletTypes): void {
+        const {shiftX, shiftY, width, height} = BulletHitBoxConfigs[type];
+        this.debugHitBox
+            .rect(shiftX, shiftY, width, height)
+            .fill({color: 0xff0000, alpha: 0.35})
+            .stroke({width: 1, color: 0xff0000, alpha: 0.9});
     }
 
     private drawRegularBullet(): void {

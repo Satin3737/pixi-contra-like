@@ -1,12 +1,13 @@
 import type {Application} from 'pixi.js';
 import type {IPos, IPosSize, ITicker} from '@/types';
-import {Camera, Physics} from '@/services';
+import {Camera, KeyEvents, Keyboard, Keys, Physics} from '@/services';
 import {
     Bullet,
     BulletFactory,
     Character,
     Entity,
     EntityCategories,
+    EntityView,
     Hero,
     HeroFactory,
     type IShootParams,
@@ -46,6 +47,10 @@ class Game {
 
         this.camera = new Camera({target: this.hero, world: this.world, screenSize: app.screen, isBackScroll: false});
 
+        Keyboard.instance.attachKey(Keys.h, KeyEvents.keyDown, () => {
+            EntityView.setDebugMode(!EntityView.debugEnabled);
+        });
+
         app.stage.addChild(this.world);
         app.ticker.add(this.update, this);
     }
@@ -83,7 +88,11 @@ class Game {
             for (const bullet of this.bullets) {
                 if (bullet.destroyed || bullet.ownerId === entity.uid) continue;
 
-                if (Physics.isAABBCollision(bullet.bounds, entity.bounds)) {
+                const collision = entity.isCircleHitbox
+                    ? Physics.isCircleAABBCollision(entity.hitbox, bullet.hitbox)
+                    : Physics.isAABBCollision(entity.hitbox, bullet.hitbox);
+
+                if (collision) {
                     entity.takeDamage(bullet.damage);
                     bullet.destroy();
                     break;
@@ -98,8 +107,8 @@ class Game {
 
             const isOutOfBounds =
                 entity instanceof Hero
-                    ? Physics.isOutOfBoundsOnlyBottom(entity.bounds, this.camera.visibleAreaBounds)
-                    : Physics.isOutOfBoundsLeft(entity.bounds, this.camera.visibleAreaBounds);
+                    ? Physics.isOutOfBoundsOnlyBottom(entity.hitbox, this.camera.visibleAreaBounds)
+                    : Physics.isOutOfBoundsLeft(entity.hitbox, this.camera.visibleAreaBounds);
 
             isOutOfBounds && entity.destroy();
         });
@@ -109,7 +118,7 @@ class Game {
         this.entities.forEach(entity => {
             if (this.hero.destroyed || entity.destroyed || !(entity instanceof Runner)) return;
 
-            if (Physics.isAABBCollision(entity.bounds, this.hero.bounds)) {
+            if (Physics.isAABBCollision(entity.hitbox, this.hero.hitbox)) {
                 this.hero.takeDamage(entity.weapon.damage);
                 entity.destroy();
             }
@@ -133,7 +142,7 @@ class Game {
     private updateBullets({deltaTime}: ITicker): void {
         this.bullets.forEach(bullet => {
             if (bullet.destroyed) return;
-            Physics.isOutOfBoundsAll(bullet.bounds, this.camera.visibleAreaBounds) && bullet.destroy();
+            Physics.isOutOfBoundsAll(bullet.hitbox, this.camera.visibleAreaBounds) && bullet.destroy();
             !bullet.destroyed && bullet.update({deltaTime});
         });
 

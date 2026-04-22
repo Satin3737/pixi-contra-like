@@ -6,7 +6,8 @@ export const Keys = {
     left: 'ArrowLeft',
     right: 'ArrowRight',
     space: 'Space',
-    a: 'KeyA'
+    a: 'KeyA',
+    h: 'KeyH'
 } as const;
 
 export const KeyEvents = {

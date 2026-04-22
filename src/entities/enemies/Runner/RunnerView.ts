@@ -1,6 +1,6 @@
 import {Graphics} from 'pixi.js';
 import {EntityView, type IEntityCommonParams} from '../../Entity';
-import {type IRunnerViewStates, RunnerViewStates} from './types';
+import {type IRunnerViewStates, RunnerHitBoxConfigs, RunnerViewStates} from './types';
 
 class RunnerView extends EntityView {
     private readonly stroke: {width: number; color: number} = {width: 2, color: 0xff0000};
@@ -21,6 +21,9 @@ class RunnerView extends EntityView {
             view.visible = this.state === state;
             this.view.addChild(view);
         });
+
+        this.drawDebugHitBox(this.state);
+        this.view.addChild(this.debugHitBox);
     }
 
     public show(state: IRunnerViewStates): void {
@@ -28,6 +31,16 @@ class RunnerView extends EntityView {
         Object.values(this.states).forEach(view => (view.visible = false));
         this.states[state].visible = true;
         this.state = state;
+        this.drawDebugHitBox(state);
+    }
+
+    private drawDebugHitBox(state: IRunnerViewStates): void {
+        const {shiftX, shiftY, width, height} = RunnerHitBoxConfigs[state];
+        this.debugHitBox.clear();
+        this.debugHitBox
+            .rect(shiftX, shiftY, width, height)
+            .fill({color: 0xff0000, alpha: 0.35})
+            .stroke({width: 1, color: 0xff0000, alpha: 0.9});
     }
 
     private drawRunView(): Graphics {

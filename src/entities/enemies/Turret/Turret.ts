@@ -4,7 +4,7 @@ import {Entity} from '../../Entity';
 import {Weapon} from '../../Weapon';
 import type {IGetTarget} from '../Enemy';
 import TurretView from './TurretView';
-import type {ITurretParams} from './types';
+import {type ITurretParams, TurretHitBoxConfig} from './types';
 
 class Turret extends Entity<TurretView> {
     private readonly weapon: Weapon;
@@ -17,6 +17,8 @@ class Turret extends Entity<TurretView> {
     public constructor({view, health, getTarget, onShoot}: ITurretParams) {
         super({view, health});
         this.getTarget = getTarget;
+        this.hitbox = TurretHitBoxConfig;
+        this._isCircleHitbox = true;
         this.weapon = new Weapon({ownerId: this.uid, onShoot});
     }
 

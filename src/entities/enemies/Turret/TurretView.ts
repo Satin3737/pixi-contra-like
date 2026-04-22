@@ -8,6 +8,8 @@ class TurretView extends EntityView {
     public constructor({options}: IEntityCommonParams) {
         super({size: {width: 100, height: 100}, options});
         this.drawTurret();
+        this.drawDebugHitBox();
+        this.view.addChild(this.debugHitBox);
     }
 
     public get barrelRotation(): number {
@@ -16,6 +18,14 @@ class TurretView extends EntityView {
 
     public set barrelRotation(value: number) {
         this.barrel.rotation = value;
+    }
+
+    private drawDebugHitBox(): void {
+        const radius = this.bounds.width / 2;
+        this.debugHitBox
+            .circle(radius, radius, radius)
+            .fill({color: 0xff0000, alpha: 0.35})
+            .stroke({width: 1, color: 0xff0000, alpha: 0.9});
     }
 
     private drawTurret(): void {

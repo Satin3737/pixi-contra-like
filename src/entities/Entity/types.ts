@@ -1,5 +1,5 @@
 import type {ContainerOptions} from 'pixi.js';
-import type {ISize, IValueOf} from '@/types';
+import type {IPosSize, ISize, IValueOf} from '@/types';
 
 export const EntityCategories = {
     entity: 'entity',
@@ -20,3 +20,10 @@ export interface IEntityParams<TEntityView> {
 export interface IEntityViewParams extends IEntityCommonParams {
     size: ISize;
 }
+
+export interface IEntityHitBox extends IPosSize {
+    shiftX: number;
+    shiftY: number;
+}
+
+export type IEntityHitBoxConfig = Omit<IEntityHitBox, 'x' | 'y'>;

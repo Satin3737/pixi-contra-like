@@ -1,7 +1,7 @@
 import type {ITicker} from '@/types';
 import {Entity} from '../Entity';
 import type BulletView from './BulletView';
-import type {IBulletParams} from './types';
+import {BulletHitBoxConfigs, type IBulletParams} from './types';
 
 class Bullet extends Entity<BulletView> {
     public readonly ownerId: number;
@@ -9,10 +9,11 @@ class Bullet extends Entity<BulletView> {
 
     private readonly speed: number = 16;
 
-    public constructor({view, ownerId, damage}: IBulletParams) {
+    public constructor({view, ownerId, damage, type}: IBulletParams) {
         super({view});
         this.ownerId = ownerId;
         this.damage = damage;
+        this.hitbox = BulletHitBoxConfigs[type];
     }
 
     public override update({deltaTime}: ITicker): void {
