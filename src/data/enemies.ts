@@ -17,10 +17,10 @@ export const RunnersData: IEntityCommonParams[] = [
 ];
 
 export const TurretsData: (IEntityCommonParams & {health: number})[] = [
-    {health: 5, options: {x: PlatformDefaultWidth * 10, y: 670}},
+    {health: 5, options: {x: PlatformDefaultWidth * 10, y: 622}},
     {health: 5, options: {x: PlatformDefaultWidth * 22, y: 500}},
-    {health: 5, options: {x: PlatformDefaultWidth * 29, y: 550}},
-    {health: 5, options: {x: PlatformDefaultWidth * 35, y: 550}},
-    {health: 5, options: {x: PlatformDefaultWidth * 45, y: 670}},
-    {health: 5, options: {x: PlatformDefaultWidth * 48, y: 670}}
+    {health: 5, options: {x: PlatformDefaultWidth * 29, y: 502}},
+    {health: 5, options: {x: PlatformDefaultWidth * 35, y: 526}},
+    {health: 5, options: {x: PlatformDefaultWidth * 45, y: 622}},
+    {health: 5, options: {x: PlatformDefaultWidth * 48, y: 478}}
 ];
