@@ -46,6 +46,17 @@ class Physics {
         return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
     }
 
+    public static isCircleAABBCollision(circle: IPosSize, rect: IPosSize): boolean {
+        const cx = circle.x + circle.width / 2;
+        const cy = circle.y + circle.height / 2;
+        const radius = circle.width / 2;
+        const nearestX = Math.max(rect.x, Math.min(cx, rect.x + rect.width));
+        const nearestY = Math.max(rect.y, Math.min(cy, rect.y + rect.height));
+        const dx = cx - nearestX;
+        const dy = cy - nearestY;
+        return dx * dx + dy * dy <= radius * radius;
+    }
+
     public static getPlatformCollision(bounds: IPosSize, platform: IPosSize, prevPos: IPos): ICollision {
         const result = {vertical: false, horizontal: false};
         if (!this.isAABBCollision(bounds, platform)) return result;
