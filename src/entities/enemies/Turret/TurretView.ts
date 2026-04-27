@@ -31,7 +31,8 @@ class TurretView extends EntityView {
     private drawTurret(): void {
         const view = new Graphics();
         view.setStrokeStyle(this.stroke);
-        view.circle(this.bounds.width / 2, this.bounds.height / 2, this.bounds.width / 2).stroke();
+        view.circle(this.bounds.width / 2, this.bounds.height / 2, this.bounds.width / 4).stroke();
+        view.rect(0, 0, this.bounds.width, this.bounds.height).stroke();
         view.pivot.set(0.5, 0.5);
         this.view.addChild(view);
 

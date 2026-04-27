@@ -18,7 +18,6 @@ class Turret extends Entity<TurretView> {
         super({view, health});
         this.getTarget = getTarget;
         this.hitbox = TurretHitBoxConfig;
-        this._isCircleHitbox = true;
         this.weapon = new Weapon({ownerId: this.uid, onShoot});
     }
 
